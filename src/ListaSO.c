@@ -1,5 +1,6 @@
 #include "ListaSO.h"
 #include "stdlib.h"
+#include "Codigos_retornos.h"
 
 void LSO_init(ListaSO *lista) {
     lista->limite_superior = -1;

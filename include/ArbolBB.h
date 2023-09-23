@@ -18,4 +18,7 @@ typedef struct {
 // Inicializacion de estructura
 void ABB_init(ArbolBB *);
 
+// ALTA
+
+
 #endif // ARBOLBB_H
