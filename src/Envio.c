@@ -28,6 +28,23 @@ void Envio_copiar(Envio *origen,Envio *destino) {
     strcpy(destino->fecha_recepcion,origen->fecha_recepcion);
 }
 
+int Envio_sonIguales(Envio *primero, Envio *segundo) {
+    /*
+        Compara dos ENVIOS campo por campo.
+        Devuelve 1 si son iguales.
+        Devuelve 0 en caso contrario.
+    */
+    if (strcmp(primero->codigo_envio,segundo->codigo_envio) != 0) return 0;
+    else if (primero->dni_receptor != segundo->dni_receptor) return 0;
+    else if (strcmp(primero->nombre_apellido_receptor,segundo->nombre_apellido_receptor) != 0) return 0;
+    else if (strcmp(primero->domicilio_receptor,segundo->domicilio_receptor) != 0) return 0;
+    else if (primero->dni_remitente != segundo->dni_remitente) return 0;
+    else if (strcmp(primero->nombre_apellido_remitente,segundo->nombre_apellido_remitente) != 0) return 0;
+    else if (strcmp(primero->fecha_envio, segundo->fecha_envio) != 0) return 0;
+    else if (strcmp(primero->fecha_recepcion, segundo->fecha_recepcion) != 0) return 0;
+    else return 1;
+}
+
 // controles
 
 int Envio_esCorrecto_fecha(char fecha[]) {
