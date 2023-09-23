@@ -36,7 +36,6 @@ int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB
 }
 
 int ABB_alta(ArbolBB *arbol, Envio *nuevo) {
-    // @todo : terminar
     ABB_Hoja *ubicacion, *ubicacion_padre;
     int salida;
 
@@ -61,4 +60,16 @@ int ABB_alta(ArbolBB *arbol, Envio *nuevo) {
     else salida = ALTA_ERROR_CODIGO_EXISTENTE;
 
     return salida;
+}
+
+int ABB_baja(ArbolBB *arbol, Envio *elemento) {
+    ABB_Hoja *ubicacion, *ubicacion_padre;
+    int salida;
+
+    if (ABB_localizar(arbol,elemento->codigo_envio,&ubicacion,&ubicacion_padre) == LOCALIZACION_EXITOSA) {
+        // si el envio es igual campo por campo
+        if (Envio_sonIguales(elemento,&(ubicacion->envio))) {
+            // @todo : terminar
+        }
+    }
 }
