@@ -2,38 +2,61 @@
 #include "stdlib.h"
 #include "Codigos_retornos.h"
 
-void LSO_init(ListaSO *lista) {
+void LSOBB_init(ListaSOBB *lista) {
     lista->limite_superior = -1;
 }
 
-int LSO_localizar(ListaSO *lista,char codigo_envio[], int *exito) {
+/*Para la lista con busqueda binaria (LSOBB) la consigna a utilizar sera biseccion, lımite inferior exclusivo, lımite
+superior inclusivo, testigo y segmento mas grande a la derecha.*/
+
+int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador) {
     // Busca en 'lista' el elemento con el campo 'codigo_envio',
     // si lo encuentra, la funcion devuelve el indice del arreglo,
     // si el elemento no se encuentra en la lista, devuelve la posicion donde deberia encontrarse.
 
-    // Variable de resultado de localizacion
-    *exito = LOCALIZACION_ERROR_NO_EXISTE;
+    // Limite inferior exclusivo
+    int li = -1;
+    int c = 0;
+    // Limite superior inclusivo
+    int ls = lista->limite_superior;
 
-    // Contador
-    int contador = 0;
+    // Testigo: (limite inferior + 1), limite superior
+    int m = ceil((li+ls)/2.0);
+    printf("m vale al inicio: %d\n",m);
 
-    // Mientras no se pase el ultimo elemento y
-    // el codigo de envio sea mayor o igual que el de Lista(contador)
-    while ((contador <= lista->limite_superior) && strcmp(lista->arreglo[contador].codigo_envio,codigo_envio) < 0 ) {
-        contador++;
+    // Mientras limite inferior sea menor a limite superior y
+    // el codigo de envio sea distinto que el codigo de envio de arreglo(m)
+    while (li < ls && strcmp(lista->arreglo[m].codigo_envio,codigo_envio) != 0) {
+
+        //Si el codigo de envio es menor al codigo de arreglo(m)
+        if (strcmp(codigo_envio,lista->arreglo[m].codigo_envio) < 0) {
+            printf("Es menor %s que %s\n",codigo_envio, lista->arreglo[m].codigo_envio);
+            //Actualiza el limite superior
+            ls = m - 1;
+        }else{
+            printf("Es mayor %s que %s\n",codigo_envio, lista->arreglo[m].codigo_envio);
+            //Actualiza el limite inferior
+            li = m;
+        }
+        m = ceil((li+ls)/2.0);
+        c ++;
+        printf("m vale: %d en la vuelta %d\n",m,c);
     }
 
-    // Si 'contador' supera el ultimo elemento, no se encontro el elemento
-    if (contador <= lista->limite_superior) {
-        // Si 'codigo_envio' es distinto del de Lista(contador), no se encontro el elemento
-        if (strcmp(lista->arreglo[contador].codigo_envio,codigo_envio) == 0) *exito = LOCALIZACION_EXITOSA;
-    }
+    // Si codigo de envio es igual a el codigo de envio de arreglo(i)
+    if (strcmp(lista->arreglo[m].codigo_envio,codigo_envio) == 0) {
 
-    return contador;
+        // Pasa ubicacion por parametro
+        *contador = m;
+        return LOCALIZACION_EXITOSA;
+    }else{
+        *contador = m+1;
+    }
+    return LOCALIZACION_ERROR_NO_EXISTE;
 }
 
 
-int LSO_alta(ListaSO *lista, Envio nuevo) {
+int LSOBB_alta(ListaSOBB *lista, Envio nuevo) {
 
     // Variable de retorno
     int salida = ALTA_ERROR_LISTA_LLENA;
@@ -69,7 +92,7 @@ int LSO_alta(ListaSO *lista, Envio nuevo) {
 }
 
 
-int LSO_baja(ListaSO *lista,char codigo_envio[], int (*manejo_confirmacion)(Envio)) {
+int LSOBB_baja(ListaSOBB *lista,char codigo_envio[], int (*manejo_confirmacion)(Envio)) {
 
     int posicion, salida = BAJA_ERROR_NO_EXISTE;
     int exito_localizar;
@@ -102,7 +125,7 @@ int LSO_baja(ListaSO *lista,char codigo_envio[], int (*manejo_confirmacion)(Envi
     return salida;
 }
 
-int LSO_modificacion(ListaSO *lista,char codigo_envio[],int (*manejo_remplazo)(Envio *)) {
+int LSOBB_modificacion(ListaSOBB *lista,char codigo_envio[],int (*manejo_remplazo)(Envio *)) {
 
     int posicion, exito_localizar, salida = MODIFICACION_CANCELADA; // salida por defecto
 
@@ -135,7 +158,7 @@ int LSO_modificacion(ListaSO *lista,char codigo_envio[],int (*manejo_remplazo)(E
     return salida;
 }
 
-int LSO_consulta(ListaSO *lista, char codigo_envio[], Envio *consultado) {
+int LSOBB_consulta(ListaSOBB *lista, char codigo_envio[], Envio *consultado) {
     int posicion, exito_localizar, salida = CONSULTA_ERROR_NO_EXISTE;
 
     // Se busca el elemento en la lista, y se captura su posicion

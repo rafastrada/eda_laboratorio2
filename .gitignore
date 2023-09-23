@@ -1,2 +1,4 @@
 
 eda_laboratorio2.layout
+*.o
+*.exe

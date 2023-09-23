@@ -17,21 +17,21 @@ typedef struct {
 } ListaSOBB;
 
 // --- INICIALIZAR
-void LSOBB_init(ListaSO *);
+void LSOBB_init(ListaSOBB *);
 
 // --- LOCALIZAR
-int LSOBB_localizar(ListaSO *,char [], int *);
+int LSOBB_localizar(ListaSOBB *,char [], int *);
 
 // --- ALTA
-int LSOBB_alta(ListaSO *,Envio);
+int LSOBB_alta(ListaSOBB *,Envio);
 
 // --- BAJA
-int LSOBB_baja(ListaSO *,char [],int (*)(Envio));
+int LSOBB_baja(ListaSOBB *,char [],int (*)(Envio));
 
 // --- MODIFICAR
-int LSOBB_modificacion(ListaSO *,char [], int (*)(Envio *));
+int LSOBB_modificacion(ListaSOBB *,char [], int (*)(Envio *));
 
 // --- CONSULTA
-int LSOBB_consulta(ListaSO *, char [],Envio *);
+int LSOBB_consulta(ListaSOBB *, char [],Envio *);
 
 #endif // LISTASOBB_H

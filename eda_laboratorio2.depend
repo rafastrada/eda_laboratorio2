@@ -1,0 +1,35 @@
+# depslib dependency file v1.0
+1695496215 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\envio.c
+	"Envio.h"
+	<string.h>
+
+1695496215 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\envio.h
+
+1695501989 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\arbolbb.c
+	<stdlib.h>
+
+1695502120 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\listaso.c
+	"ListaSO.h"
+	"stdlib.h"
+	"Codigos_retornos.h"
+
+1695496215 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\codigos_retornos.h
+
+1695496215 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\listaso.h
+	"Envio.h"
+
+1695506487 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\listasobb.c
+	"ListaSOBB.h"
+	"stdlib.h"
+	"Codigos_retornos.h"
+
+1695501696 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\listasobb.h
+	"Envio.h"
+
+1695506215 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<ListaSOBB.h>
+	<Codigos_retornos.h>
+	<Envio.h>
+
