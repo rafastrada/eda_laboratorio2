@@ -1,11 +1,11 @@
 #include "ListaSO.h"
 #include "stdlib.h"
 
-void Lista_init(Lista *lista) {
+void LSO_init(ListaSO *lista) {
     lista->limite_superior = -1;
 }
 
-int Lista_localizar(Lista *lista,char codigo_envio[], int *exito) {
+int LSO_localizar(ListaSO *lista,char codigo_envio[], int *exito) {
     // Busca en 'lista' el elemento con el campo 'codigo_envio',
     // si lo encuentra, la funcion devuelve el indice del arreglo,
     // si el elemento no se encuentra en la lista, devuelve la posicion donde deberia encontrarse.
@@ -32,7 +32,7 @@ int Lista_localizar(Lista *lista,char codigo_envio[], int *exito) {
 }
 
 
-int Lista_alta(Lista *lista, Envio nuevo) {
+int LSO_alta(ListaSO *lista, Envio nuevo) {
 
     // Variable de retorno
     int salida = ALTA_ERROR_LISTA_LLENA;
@@ -41,7 +41,7 @@ int Lista_alta(Lista *lista, Envio nuevo) {
 
     // Comprueba si existe un ENVIO con CODIGO DE ENVIO similar
     // y obtiene la posicion en donde deberia ir el elemento
-    int posicion_nuevo = Lista_localizar(lista,nuevo.codigo_envio,&exito_localizar);
+    int posicion_nuevo = LSO_localizar(lista,nuevo.codigo_envio,&exito_localizar);
 
     // Se procesa el ALTA
     if (exito_localizar == LOCALIZACION_ERROR_NO_EXISTE) {
@@ -68,14 +68,14 @@ int Lista_alta(Lista *lista, Envio nuevo) {
 }
 
 
-int Lista_baja(Lista *lista,char codigo_envio[], int (*manejo_confirmacion)(Envio)) {
+int LSO_baja(ListaSO *lista,char codigo_envio[], int (*manejo_confirmacion)(Envio)) {
 
     int posicion, salida = BAJA_ERROR_NO_EXISTE;
     int exito_localizar;
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
-    posicion = Lista_localizar(lista,codigo_envio,&exito_localizar);
+    posicion = LSO_localizar(lista,codigo_envio,&exito_localizar);
 
     if (exito_localizar == LOCALIZACION_EXITOSA) {
         int confirmacion = 1;
@@ -101,12 +101,12 @@ int Lista_baja(Lista *lista,char codigo_envio[], int (*manejo_confirmacion)(Envi
     return salida;
 }
 
-int Lista_modificacion(Lista *lista,char codigo_envio[],int (*manejo_remplazo)(Envio *)) {
+int LSO_modificacion(ListaSO *lista,char codigo_envio[],int (*manejo_remplazo)(Envio *)) {
 
     int posicion, exito_localizar, salida = MODIFICACION_CANCELADA; // salida por defecto
 
     // Se busca el 'codigo_envio' en la lista
-    posicion = Lista_localizar(lista,codigo_envio,&exito_localizar);
+    posicion = LSO_localizar(lista,codigo_envio,&exito_localizar);
 
     // Si existe el elemento, se procesa la modificacion
     if (exito_localizar == LOCALIZACION_EXITOSA) {
@@ -134,11 +134,11 @@ int Lista_modificacion(Lista *lista,char codigo_envio[],int (*manejo_remplazo)(E
     return salida;
 }
 
-int Lista_consulta(Lista *lista, char codigo_envio[], Envio *consultado) {
+int LSO_consulta(ListaSO *lista, char codigo_envio[], Envio *consultado) {
     int posicion, exito_localizar, salida = CONSULTA_ERROR_NO_EXISTE;
 
     // Se busca el elemento en la lista, y se captura su posicion
-    posicion = Lista_localizar(lista,codigo_envio,&exito_localizar);
+    posicion = LSO_localizar(lista,codigo_envio,&exito_localizar);
 
     // Si el elemento existe, se procesa.
     // Caso contrario la funcion continua y retorna 'CONSULTA_ERROR_NO_EXISTE'
