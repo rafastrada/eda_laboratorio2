@@ -28,6 +28,7 @@ typedef struct {
 // Funciones para el objeto Envio
 void Envio_init(Envio *);
 void Envio_copiar(Envio *,Envio *);
+int Envio_sonIguales(Envio *,Envio *);
 
 // Funciones de control
 int Envio_esCorrecto_fecha(char []);

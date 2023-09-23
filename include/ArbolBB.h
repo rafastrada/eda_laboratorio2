@@ -18,7 +18,14 @@ typedef struct {
 // Inicializacion de estructura
 void ABB_init(ArbolBB *);
 
+// Localizar
+int ABB_localizar(ArbolBB *,char [], ABB_Hoja **, ABB_Hoja **);
+
 // ALTA
+void ABB_alta(ArbolBB *,Envio *);
+
+// Baja
+int ABB_baja(ArbolBB *,Envio *);
 
 
 #endif // ARBOLBB_H
