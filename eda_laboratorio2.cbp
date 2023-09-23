@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -31,7 +33,23 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="include/ArbolBB.h" />
+		<Unit filename="include/Envio.h" />
+		<Unit filename="include/ListaSO.h" />
+		<Unit filename="include/ListaSOBB.h" />
 		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ArbolBB.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Envio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ListaSO.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ListaSOBB.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
