@@ -1,5 +1,6 @@
 #include "ArbolBB.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include "Codigos_retornos.h"
 
 void ABB_init(ArbolBB *arbol) {
@@ -16,7 +17,7 @@ int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB
     // mientras no se llegue a un nodo externo y
     // el codigo buscado no coincida con el apuntado
     while (visor != NULL &&
-           strcmp(codigo_envio, visor->envio.codigo_envio) != 0) {
+        strcmp(codigo_envio, visor->envio.codigo_envio) != 0) {
         // se guarda la hoja padre
         visor_anterior = visor;
         // si el codigo buscado es mayor que el apuntado...
@@ -29,10 +30,35 @@ int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB
     *ubicacion = visor; *ubicacion_padre = visor_anterior;
 
     // si no se apunta un nodo externo (null), entonces se encontro el elemento
+    // @todo : la comparacion es por codigo o por todos los campos?
     if (visor != NULL) return LOCALIZACION_EXITOSA;
     else return LOCALIZACION_ERROR_NO_EXISTE;
 }
 
 int ABB_alta(ArbolBB *arbol, Envio *nuevo) {
     // @todo : terminar
+    ABB_Hoja *ubicacion, *ubicacion_padre;
+    int salida;
+
+    // si el nuevo elemento no se encuentra en el arbol, se procede a agregarlo
+    if (ABB_localizar(arbol,nuevo->codigo_envio,&ubicacion,&ubicacion_padre) == LOCALIZACION_ERROR_NO_EXISTE) {
+        // se determina en cual de las hojas hijas debe ir el nuevo elemento
+        if (strcmp(nuevo->codigo_envio,ubicacion_padre->envio.codigo_envio) < 0) ubicacion = ubicacion_padre->menores;
+        else ubicacion = ubicacion_padre->mayores
+
+        // se solicita memoria para el nuevo elemento
+        ubicacion = (ABB_Hoja*) malloc(sizeof(ABB_Hoja));
+        // si hay memoria disponible, se agrega el elemento
+        if (ubicacion_padre->menores != NULL) {
+            Envio_copiar(nuevo,&(ubicacion->envio));
+            // se actualiza la salida
+            salida = ALTA_EXITOSA;
+        }
+        // caso que no haya memoria disponible
+        else salida = ALTA_ERROR_LISTA_LLENA;
+    }
+    // caso que ya existiese un ENVIO similar
+    else salida = ALTA_ERROR_CODIGO_EXISTENTE;
+
+    return salida;
 }
