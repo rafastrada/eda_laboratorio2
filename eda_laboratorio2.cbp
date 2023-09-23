@@ -34,6 +34,7 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="include/ArbolBB.h" />
+		<Unit filename="include/Codigos_retornos.h" />
 		<Unit filename="include/Envio.h" />
 		<Unit filename="include/ListaSO.h" />
 		<Unit filename="include/ListaSOBB.h" />
