@@ -70,7 +70,8 @@ int ABB_alta(ArbolBB *arbol, Envio *nuevo) {
         // si hay memoria disponible, se agrega el elemento
         if (*nueva_hoja != NULL) {
             ABB_initHoja(*nueva_hoja);  // se inician los hijos de la hoja nueva en NULL
-            Envio_copiar(nuevo,*nueva_hoja);    // se copian los campos uno a uno
+            //Envio_copiar(nuevo,*nueva_hoja);    // se copian los campos uno a uno
+            (*nueva_hoja)->envio = *nuevo;
             // se actualiza la salida
             salida = ALTA_EXITOSA;
         }
