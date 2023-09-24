@@ -33,3 +33,41 @@
 	<Codigos_retornos.h>
 	<Envio.h>
 
+1695510521 source:c:\users\guillermo\codeblocks\eda_laboratorio2\src\envio.c
+	"Envio.h"
+	<string.h>
+
+1695510521 c:\users\guillermo\codeblocks\eda_laboratorio2\include\envio.h
+
+1695495745 source:c:\users\guillermo\codeblocks\eda_laboratorio2\src\listaso.c
+	"ListaSO.h"
+	"stdlib.h"
+	"Codigos_retornos.h"
+
+1695495643 c:\users\guillermo\codeblocks\eda_laboratorio2\include\listaso.h
+	"Envio.h"
+
+1695495734 c:\users\guillermo\codeblocks\eda_laboratorio2\include\codigos_retornos.h
+
+1695510511 source:c:\users\guillermo\codeblocks\eda_laboratorio2\src\listasobb.c
+	"ListaSOBB.h"
+	"stdlib.h"
+	"Codigos_retornos.h"
+
+1695510511 c:\users\guillermo\codeblocks\eda_laboratorio2\include\listasobb.h
+	"Envio.h"
+
+1695578293 source:c:\users\guillermo\codeblocks\eda_laboratorio2\main.c
+	<stdio.h>
+	<stdlib.h>
+	"ArbolBB.h"
+
+1695576608 c:\users\guillermo\codeblocks\eda_laboratorio2\include\arbolbb.h
+	"Envio.h"
+
+1695577283 source:c:\users\guillermo\codeblocks\eda_laboratorio2\src\arbolbb.c
+	"ArbolBB.h"
+	<stdlib.h>
+	<stdio.h>
+	"Codigos_retornos.h"
+

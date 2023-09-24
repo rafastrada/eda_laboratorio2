@@ -16,18 +16,6 @@ void Envio_init(Envio *envio) {
     strcpy(envio->nombre_apellido_remitente,"");
 }
 
-void Envio_copiar(Envio *origen,Envio *destino) {
-    // Copia los campos de ORIGEN a DESTINO
-    strcpy(destino->codigo_envio,origen->codigo_envio);
-    destino->dni_receptor = origen->dni_receptor;
-    strcpy(destino->nombre_apellido_receptor,origen->nombre_apellido_receptor);
-    strcpy(destino->domicilio_receptor,origen->domicilio_receptor);
-    destino->dni_remitente = origen->dni_remitente;
-    strcpy(destino->nombre_apellido_remitente,origen->nombre_apellido_remitente);
-    strcpy(destino->fecha_envio,origen->fecha_envio);
-    strcpy(destino->fecha_recepcion,origen->fecha_recepcion);
-}
-
 int Envio_sonIguales(Envio *primero, Envio *segundo) {
     /*
         Compara dos ENVIOS campo por campo.

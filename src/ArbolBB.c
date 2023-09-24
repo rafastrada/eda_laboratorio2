@@ -1,12 +1,18 @@
-/*#include "ArbolBB.h"
+#include "ArbolBB.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include "Codigos_retornos.h"
 
-void ABB_init(ArbolBB *arbol) {
+void ABB_initArbol(ArbolBB *arbol) {
     // inicia la raiz del arbol apuntando a un nodo externo
     arbol->raiz = NULL;
-}*/
+}
+
+void ABB_initHoja(ABB_Hoja *hoja) {
+    // inicia los punteros en NULL
+    hoja->menores = NULL;
+    hoja->mayores = NULL;
+}
 
 int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB_Hoja **ubicacion_padre) {
     ABB_Hoja *visor, *visor_anterior;
@@ -41,15 +47,30 @@ int ABB_alta(ArbolBB *arbol, Envio *nuevo) {
 
     // si el nuevo elemento no se encuentra en el arbol, se procede a agregarlo
     if (ABB_localizar(arbol,nuevo->codigo_envio,&ubicacion,&ubicacion_padre) == LOCALIZACION_ERROR_NO_EXISTE) {
-        // se determina en cual de las hojas hijas debe ir el nuevo elemento
-        if (strcmp(nuevo->codigo_envio,ubicacion_padre->envio.codigo_envio) < 0) ubicacion = ubicacion_padre->menores;
-        else ubicacion = ubicacion_padre->mayores
+        // Como la localizacion no encontro el elemento, 'ubicacion' vale NULL, por lo que utilizamos
+        // el padre de la ubicacion que le corresponde a dicho elemento, entonces hay que determinar si el elemento
+        // iba en la rama izquierda (menores) o la derecha (mayores).
+        // Tambien hay que tener en cuenta el caso en el que el arbol esta vacio ('raiz' vale NULL)
+
+        ABB_Hoja **nueva_hoja;  // para determinar en donde se pide la memoria
+
+        // Caso: arbol esta vacio ('raiz' apunta a NULL)
+        if (arbol->raiz == NULL) {
+            nueva_hoja = &(arbol->raiz);
+        }
+        // Caso: el elemento debe ser hijo de una hoja (arbol no vacio)
+        else {
+            // se determina en que hoja hija sera el nuevo elemento
+            if (strcmp(nuevo->codigo_envio,ubicacion_padre->envio.codigo_envio) < 0) nueva_hoja = &(ubicacion_padre->menores);
+            else nueva_hoja = &(ubicacion_padre->mayores);
+        }
 
         // se solicita memoria para el nuevo elemento
-        ubicacion = (ABB_Hoja*) malloc(sizeof(ABB_Hoja));
+        *nueva_hoja = (ABB_Hoja*) malloc(sizeof(ABB_Hoja));
         // si hay memoria disponible, se agrega el elemento
-        if (ubicacion_padre->menores != NULL) {
-            Envio_copiar(nuevo,&(ubicacion->envio));
+        if (*nueva_hoja != NULL) {
+            ABB_initHoja(*nueva_hoja);  // se inician los hijos de la hoja nueva en NULL
+            Envio_copiar(nuevo,*nueva_hoja);    // se copian los campos uno a uno
             // se actualiza la salida
             salida = ALTA_EXITOSA;
         }
@@ -72,4 +93,17 @@ int ABB_baja(ArbolBB *arbol, Envio *elemento) {
             // @todo : terminar
         }
     }
+}
+
+int ABB_consulta(ArbolBB *arbol, char codigo_envio[], Envio *consultado) {
+    // Busca por el codigo pasado por parametro el ENVIO asociado.
+    // Si este existe, se copia a 'consultado'
+
+    ABB_Hoja *ubicacion, *ubicacion_padre;
+
+    if (ABB_localizar(arbol,codigo_envio,&ubicacion,&ubicacion_padre) == LOCALIZACION_EXITOSA) {
+        *consultado = ubicacion->envio;
+        return CONSULTA_EXITOSA;
+    }
+    else return CONSULTA_ERROR_NO_EXISTE;
 }
