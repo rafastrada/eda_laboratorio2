@@ -1,4 +1,6 @@
 
-eda_laboratorio2.layout
+*.layout
 *.o
 *.exe
+*.depend
+*.cscope_file_list
