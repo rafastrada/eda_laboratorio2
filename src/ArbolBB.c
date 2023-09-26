@@ -1,6 +1,7 @@
 #include "ArbolBB.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "Codigos_retornos.h"
 
 void ABB_initArbol(ArbolBB *arbol) {
@@ -114,8 +115,13 @@ int ABB_baja(ArbolBB *arbol, Envio *elemento) {
                 // se borra de la memoria el elemento
                 free(ubicacion);
             }
+
+			salida = BAJA_EXITOSA;
         }
+		else salida = BAJA_ERROR_NO_EXISTE;
     }
+
+	return salida;
 }
 
 int ABB_consulta(ArbolBB *arbol, char codigo_envio[], Envio *consultado) {
