@@ -24,7 +24,7 @@ void ABB_initArbol(ArbolBB *);
 void ABB_initHoja(ABB_Hoja *);
 
 // Localizar
-int ABB_localizar(ArbolBB *,char [], ABB_Hoja **, ABB_Hoja **);
+int ABB_localizar(ArbolBB *,char [], ABB_Hoja **, ABB_Hoja ***);
 
 // ALTA
 int ABB_alta(ArbolBB *,Envio *);
