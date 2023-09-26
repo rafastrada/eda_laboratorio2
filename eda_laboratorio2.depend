@@ -1,12 +1,15 @@
 # depslib dependency file v1.0
-1695496215 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\envio.c
+1695593612 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\envio.c
 	"Envio.h"
 	<string.h>
 
-1695496215 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\envio.h
+1695593612 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\envio.h
 
-1695501989 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\arbolbb.c
+1695593612 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\arbolbb.c
+	"ArbolBB.h"
 	<stdlib.h>
+	<stdio.h>
+	"Codigos_retornos.h"
 
 1695502120 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\listaso.c
 	"ListaSO.h"
@@ -18,7 +21,7 @@
 1695496215 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\listaso.h
 	"Envio.h"
 
-1695506487 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\listasobb.c
+1695739008 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\listasobb.c
 	"ListaSOBB.h"
 	"stdlib.h"
 	"Codigos_retornos.h"
@@ -26,7 +29,7 @@
 1695501696 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\listasobb.h
 	"Envio.h"
 
-1695506215 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\main.c
+1695739032 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\main.c
 	<stdio.h>
 	<stdlib.h>
 	<ListaSOBB.h>
@@ -70,4 +73,7 @@
 	<stdlib.h>
 	<stdio.h>
 	"Codigos_retornos.h"
+
+1695593612 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\arbolbb.h
+	"Envio.h"
 

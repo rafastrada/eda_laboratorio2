@@ -3,6 +3,8 @@
 #include "Codigos_retornos.h"
 
 void LSOBB_init(ListaSOBB *lista) {
+
+    strcpy(lista->arreglo[0].codigo_envio,"0");
     lista->limite_superior = -1;
 }
 
@@ -16,31 +18,28 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador) {
 
     // Limite inferior exclusivo
     int li = -1;
-    int c = 0;
+
     // Limite superior inclusivo
-    int ls = lista->limite_superior;
+    int ls = lista-> limite_superior + 1;
 
     // Testigo: (limite inferior + 1), limite superior
-    int m = ceil((li+ls)/2.0);
-    printf("m vale al inicio: %d\n",m);
+    int m = ceil((li + 1 + ls) / 2.0);
 
-    // Mientras limite inferior sea menor a limite superior y
-    // el codigo de envio sea distinto que el codigo de envio de arreglo(m)
-    while (li < ls && strcmp(lista->arreglo[m].codigo_envio,codigo_envio) != 0) {
+    // Mientras el limite inferior sea menor al limite superior
+    while (li+1 < ls) {
 
         //Si el codigo de envio es menor al codigo de arreglo(m)
-        if (strcmp(codigo_envio,lista->arreglo[m].codigo_envio) < 0) {
-            printf("Es menor %s que %s\n",codigo_envio, lista->arreglo[m].codigo_envio);
+        if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0) {
             //Actualiza el limite superior
             ls = m - 1;
         }else{
-            printf("Es mayor %s que %s\n",codigo_envio, lista->arreglo[m].codigo_envio);
             //Actualiza el limite inferior
-            li = m;
+            li = m - 1;
         }
-        m = ceil((li+ls)/2.0);
-        c ++;
-        printf("m vale: %d en la vuelta %d\n",m,c);
+
+        //Actualizando testigo
+        m = ceil((li + 1 + ls) / 2.0);
+
     }
 
     // Si codigo de envio es igual a el codigo de envio de arreglo(i)
@@ -49,8 +48,14 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador) {
         // Pasa ubicacion por parametro
         *contador = m;
         return LOCALIZACION_EXITOSA;
+
     }else{
-        *contador = m+1;
+
+        // Si el codigo de envio es menor al codigo de arreglo(i)
+        if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0)
+            *contador = m;
+        else
+            *contador = m+1;
     }
     return LOCALIZACION_ERROR_NO_EXISTE;
 }
@@ -61,11 +66,11 @@ int LSOBB_alta(ListaSOBB *lista, Envio nuevo) {
     // Variable de retorno
     int salida = ALTA_ERROR_LISTA_LLENA;
     // Variable de exito de localizar
-    int exito_localizar;
+    int posicion_nuevo;
 
     // Comprueba si existe un ENVIO con CODIGO DE ENVIO similar
     // y obtiene la posicion en donde deberia ir el elemento
-    int posicion_nuevo = LSO_localizar(lista,nuevo.codigo_envio,&exito_localizar);
+    int exito_localizar = LSO_localizar(lista,nuevo.codigo_envio,&posicion_nuevo);
 
     // Se procesa el ALTA
     if (exito_localizar == LOCALIZACION_ERROR_NO_EXISTE) {
