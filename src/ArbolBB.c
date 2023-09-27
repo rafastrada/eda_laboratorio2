@@ -167,6 +167,7 @@ int ABB_mostrarArbol_preorden(ArbolBB *arbol) {
     // si el arbol no esta vacio
     if (cursor_hoja != NULL) {
         int contador = 0;
+	char *codigo_mayor, *codigo_menor, texto_null[] = "(null)";
         // se inicia una pila para almacenar punteros
         Pila pila_punteros; Pila_init(&pila_punteros);
 
@@ -179,7 +180,11 @@ int ABB_mostrarArbol_preorden(ArbolBB *arbol) {
 
             // Impresion por pantalla
             contador++;
-            ABB_imprimirHoja(cursor_hoja);
+		if (cursor_hoja->mayores != NULL) codigo_mayor = (cursor_hoja->mayores->envio).codigo_envio;
+		else codigo_mayor = texto_null;
+		if (cursor_hoja->menores != NULL) codigo_menor = (cursor_hoja->mayores->envio).codigo_envio;
+		else codigo_menor = texto_null;
+            ABB_imprimirHoja(cursor_hoja,codigo_menor,codigo_mayor);
 
             // se agrega la rama derecha a la pila, para recorrerse despues de la izquierda
             if (cursor_hoja->mayores != NULL) Pila_agregar(&pila_punteros,cursor_hoja->mayores);

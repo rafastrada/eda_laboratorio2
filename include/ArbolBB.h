@@ -40,7 +40,7 @@ int ABB_mostrarArbol_preorden(ArbolBB *);
 void ABB_liberarMemoria(ArbolBB *);
 
 
-#define ABB_imprimirHoja(H) printf("Codigo de Envio:\t\t\t%s\n"\
+#define ABB_imprimirHoja(H,X,Y) printf("Codigo de Envio:\t\t\t%s\n"\
                                    "DNI de Receptor:\t\t\t%u\n"\
                                    "Nombre y Apellido de Receptor:\t\t%s\n"\
                                    "Domicilio de Receptor:\t\t\t%s\n"\
@@ -59,8 +59,8 @@ void ABB_liberarMemoria(ArbolBB *);
                                    ((H)->envio).nombre_apellido_remitente,\
                                    ((H)->envio).fecha_envio,\
                                    ((H)->envio).fecha_recepcion,\
-                                   ((H)->menores->envio).codigo_envio,\
-                                   ((H)->mayores->envio).codigo_envio)
+                                   (X),\
+                                   (Y))
 
 
 #endif // ARBOLBB_H
