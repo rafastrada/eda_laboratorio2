@@ -38,6 +38,9 @@ int ABB_consulta(ArbolBB *, char [], Envio *);
 // Barrido preorden
 int ABB_mostrarArbol_preorden(ArbolBB *);
 
+// Liberar la memoria del arbol antes de cerrar el programa
+void ABB_liberarMemoria(ArbolBB *);
+
 
 #define ABB_imprimirHoja(H) printf("Codigo de Envio:\t\t\t%s\n"\
                                    "DNI de Receptor:\t\t\t%u\n"\

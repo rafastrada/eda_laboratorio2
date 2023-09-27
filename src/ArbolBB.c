@@ -171,3 +171,26 @@ int ABB_mostrarArbol_preorden(ArbolBB *arbol) {
     }
     else return 0;
 }
+
+
+void ABB_liberarMemoria(ArbolBB *arbol) {
+    //realizar un recorrido preorden por el arbol para liberar la memoria
+    // de cada una de las hojas, ya que si se usa 'malloc', antes de
+    // cerrar el programa debe ser liberada con 'free'
+    ABB_Hoja *cursor_hoja = arbol->raiz;
+
+    if (cursor_hoja != NULL) {
+        Pila pila_punteros; Pila_init(&pila_punteros);
+        Pila_agregar(&pila_punteros,cursor_hoja);
+
+        while (pila_punteros.tope > -1) {
+            Pila_quitar(&pila_punteros, &cursor_hoja);
+
+            // agregar ramas a la pila
+            if (cursor_hoja->mayores != NULL) Pila_agregar(&pila_punteros,cursor_hoja->mayores);
+            if (cursor_hoja->menores != NULL) Pila_agregar(&pila_punteros,cursor_hoja->menores);
+
+            free(cursor_hoja);
+        }
+    }
+}
