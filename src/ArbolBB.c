@@ -43,7 +43,6 @@ int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB
     }
 
     // si no se apunta un nodo externo (null), entonces se encontro el elemento
-    // @todo : la comparacion es por codigo o por todos los campos?
     if (*ubicacion != NULL) return LOCALIZACION_EXITOSA;
     else return LOCALIZACION_ERROR_NO_EXISTE;
 }
@@ -85,7 +84,6 @@ int ABB_baja(ArbolBB *arbol, Envio *elemento) {
     if (ABB_localizar(arbol,elemento->codigo_envio,&ubicacion,&ubicacion_puntero_padre) == LOCALIZACION_EXITOSA) {
         // si el envio es igual campo por campo
         if (Envio_sonIguales(elemento,&(ubicacion->envio))) {
-            // @todo : agregar confirmacion por el usuario?
             // Caso: el nodo a eliminar tiene 2 hijos
             if (ubicacion->menores != NULL && ubicacion->mayores != NULL) {
                 //Se busca el menor de los mayores (y el puntero del padre)
