@@ -38,6 +38,7 @@
 		<Unit filename="include/Envio.h" />
 		<Unit filename="include/ListaSO.h" />
 		<Unit filename="include/ListaSOBB.h" />
+		<Unit filename="include/Pila.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -51,6 +52,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/ListaSOBB.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Pila.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
