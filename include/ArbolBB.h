@@ -24,16 +24,13 @@ void ABB_initArbol(ArbolBB *);
 void ABB_initHoja(ABB_Hoja *);
 
 // Localizar
-int ABB_localizar(ArbolBB *,char [], ABB_Hoja **, ABB_Hoja ***);
+int ABB_localizar(ArbolBB *,char [], ABB_Hoja **, ABB_Hoja ***, Costos_estructura *);
 
 // ALTA
-int ABB_alta(ArbolBB *,Envio *);
+int ABB_alta(ArbolBB *,Envio *, Costos_estructura *);
 
 // Baja
-int ABB_baja(ArbolBB *,Envio *);
-
-// Consulta
-int ABB_consulta(ArbolBB *, char [], Envio *);
+int ABB_baja(ArbolBB *,Envio *, Costos_estructura *);
 
 // Barrido preorden
 int ABB_mostrarArbol_preorden(ArbolBB *);

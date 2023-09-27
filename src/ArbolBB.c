@@ -4,6 +4,7 @@
 #include <string.h>
 #include "Codigos_retornos.h"
 #include "Pila.h"
+#include "Costos.h"
 
 void ABB_initArbol(ArbolBB *arbol) {
     // inicia la raiz del arbol apuntando a un nodo externo
@@ -16,12 +17,13 @@ void ABB_initHoja(ABB_Hoja *hoja) {
     hoja->mayores = NULL;
 }
 
-int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB_Hoja ***ubicacion_puntero_padre) {
+int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB_Hoja ***ubicacion_puntero_padre, Costos_estructura *costos) {
     /*
         La funcion devuelve por el parametro 'ubicacion' la direccion del nodo del elemento buscado
         (el nodo con el elemento o el nodo externo donde deberia encontrarse).
         El parametro 'ubicacion_puntero_padre' devuelve la direccion del PUNTERO que apunta al nodo del elemento buscado.
     */
+    int celdas_consultadas = 0;     // para calculo de costos
 
     // se inicia la busqueda en la raiz
     *ubicacion = arbol->raiz, *ubicacion_puntero_padre = &(arbol->raiz);
@@ -40,19 +42,37 @@ int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB
             *ubicacion_puntero_padre = &((*ubicacion)->menores);
             *ubicacion = (*ubicacion)->menores;
         }
+
+        celdas_consultadas++;   // una celda consultada
     }
 
+    celdas_consultadas++;   // se añade la consulta a la celda que cierra el bucle anterior
+
     // si no se apunta un nodo externo (null), entonces se encontro el elemento
-    if (*ubicacion != NULL) return LOCALIZACION_EXITOSA;
-    else return LOCALIZACION_ERROR_NO_EXISTE;
+    if (*ubicacion != NULL) {
+        // se refleja el costo de la localizacion exitosa
+        (costos->Localizacion_exitosa.cantidad)++;
+        costos->Localizacion_exitosa.sumatoria_vector += celdas_consultadas;
+        if (costos->Localizacion_exitosa.maximo < celdas_consultadas) costos->Localizacion_exitosa.maximo = celdas_consultadas;
+
+        return LOCALIZACION_EXITOSA;
+    }
+    else {
+        // se refleja el costo del fracaso de la localizacion
+        (costos->Localizacion_fallida.cantidad)++;
+        costos->Localizacion_fallida.sumatoria_vector += celdas_consultadas;
+        if (costos->Localizacion_fallida.maximo < celdas_consultadas) costos->Localizacion_fallida.maximo = celdas_consultadas;
+
+        return LOCALIZACION_ERROR_NO_EXISTE;
+    }
 }
 
-int ABB_alta(ArbolBB *arbol, Envio *nuevo) {
+int ABB_alta(ArbolBB *arbol, Envio *nuevo, Costos_estructura *costos) {
     ABB_Hoja *ubicacion, **ubicacion_puntero_padre;
     int salida;
 
     // si el nuevo elemento no se encuentra en el arbol, se procede a agregarlo
-    if (ABB_localizar(arbol,nuevo->codigo_envio,&ubicacion,&ubicacion_puntero_padre) == LOCALIZACION_ERROR_NO_EXISTE) {
+    if (ABB_localizar(arbol,nuevo->codigo_envio,&ubicacion,&ubicacion_puntero_padre,costos) == LOCALIZACION_ERROR_NO_EXISTE) {
         // Como la localizacion no encontro el elemento, 'ubicacion' vale NULL, por lo que utilizamos el
         // puntero del padre que apuntaba la ubicacion que le corresponde a dicho elemento
 
@@ -66,6 +86,12 @@ int ABB_alta(ArbolBB *arbol, Envio *nuevo) {
             (*ubicacion_puntero_padre)->envio = *nuevo;     // se copian los campos uno a uno
             // se actualiza la salida
             salida = ALTA_EXITOSA;
+
+            // costo de alta exitosa
+            (costos->Alta.cantidad)++;
+            costos->Alta.sumatoria_vector += 1.5;   // 0.5 por el puntero actualizado + 1.0 por la copia de los datos
+            if (costos->Alta.maximo < 1.5) costos->Alta.maximo = 1.5;   // operacion redundante despues de la primera alta
+            // @todo : quitar 'if' redundante de operacion de alta?
         }
         // caso que no haya memoria disponible
         else salida = ALTA_ERROR_LISTA_LLENA;
@@ -76,12 +102,12 @@ int ABB_alta(ArbolBB *arbol, Envio *nuevo) {
     return salida;
 }
 
-int ABB_baja(ArbolBB *arbol, Envio *elemento) {
+int ABB_baja(ArbolBB *arbol, Envio *elemento, Costos_estructura *costos) {
     ABB_Hoja *ubicacion, **ubicacion_puntero_padre;
     int salida;
 
     // Caso: si el elemento se encuentra en el arbol
-    if (ABB_localizar(arbol,elemento->codigo_envio,&ubicacion,&ubicacion_puntero_padre) == LOCALIZACION_EXITOSA) {
+    if (ABB_localizar(arbol,elemento->codigo_envio,&ubicacion,&ubicacion_puntero_padre,costos) == LOCALIZACION_EXITOSA) {
         // si el envio es igual campo por campo
         if (Envio_sonIguales(elemento,&(ubicacion->envio))) {
             // Caso: el nodo a eliminar tiene 2 hijos
@@ -102,6 +128,9 @@ int ABB_baja(ArbolBB *arbol, Envio *elemento) {
                 // y finalmente se libera la memoria del lugar que ocupaba el menor de los mayores
                 free(hoja_remplazo);
 
+                // costo para nodo con 2 hijos
+                costos->Baja.sumatoria_vector += 1.5;   // 0.5 por actualizar un puntero + 1.0 por copiar los datos del menor de los mayores
+                if (costos->Baja.maximo < 1.5) costos->Baja.maximo = 1.5;
             }
             // Caso: menos de 2 hijos
             else {
@@ -113,7 +142,12 @@ int ABB_baja(ArbolBB *arbol, Envio *elemento) {
 
                 // se borra de la memoria el elemento
                 free(ubicacion);
+
+                // costo para nodo con 1 o 0 hijos
+                costos->Baja.sumatoria_vector += 0.5;   // se actualiza un solo puntero
+                if (costos->Baja.maximo < 0.5) costos->Baja.maximo = 0.5;
             }
+            (costos->Baja.cantidad)++;      // un costo mas en el vector
 
 			salida = BAJA_EXITOSA;
         }
@@ -121,19 +155,6 @@ int ABB_baja(ArbolBB *arbol, Envio *elemento) {
     }
 
 	return salida;
-}
-
-int ABB_consulta(ArbolBB *arbol, char codigo_envio[], Envio *consultado) {
-    // Busca por el codigo pasado por parametro el ENVIO asociado.
-    // Si este existe, se copia a 'consultado'
-
-    ABB_Hoja *ubicacion, **ubicacion_puntero_padre;
-
-    if (ABB_localizar(arbol,codigo_envio,&ubicacion,&ubicacion_puntero_padre) == LOCALIZACION_EXITOSA) {
-        *consultado = ubicacion->envio;
-        return CONSULTA_EXITOSA;
-    }
-    else return CONSULTA_ERROR_NO_EXISTE;
 }
 
 
