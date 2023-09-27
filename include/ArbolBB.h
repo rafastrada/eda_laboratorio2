@@ -35,5 +35,31 @@ int ABB_baja(ArbolBB *,Envio *);
 // Consulta
 int ABB_consulta(ArbolBB *, char [], Envio *);
 
+// Barrido preorden
+int ABB_mostrarArbol_preorden(ArbolBB *);
+
+
+#define ABB_imprimirHoja(H) printf("Codigo de Envio:\t\t\t%s\n"\
+                                   "DNI de Receptor:\t\t\t%u\n"\
+                                   "Nombre y Apellido de Receptor:\t\t%s\n"\
+                                   "Domicilio de Receptor:\t\t\t%s\n"\
+                                   "DNI de Remitente:\t\t\t%u\n"\
+                                   "Nombre y Apellido de Remitente:\t\t%s\n"\
+                                   "Fecha de Envio:\t\t\t\t%s\n"\
+                                   "Fecha de Recepcion:\t\t\t%s\n"\
+                                   "\t|\n"\
+                                   "\t\\__Cod. de hijo Izq: %s\n"\
+                                   "\t\\__Cod. de hijo Der: %s\n\n",\
+                                   ((H)->envio).codigo_envio,\
+                                   ((H)->envio).dni_receptor,\
+                                   ((H)->envio).nombre_apellido_receptor,\
+                                   ((H)->envio).domicilio_receptor,\
+                                   ((H)->envio).dni_remitente,\
+                                   ((H)->envio).nombre_apellido_remitente,\
+                                   ((H)->envio).fecha_envio,\
+                                   ((H)->envio).fecha_recepcion,\
+                                   ((H)->menores->envio).codigo_envio,\
+                                   ((H)->mayores->envio).codigo_envio)
+
 
 #endif // ARBOLBB_H

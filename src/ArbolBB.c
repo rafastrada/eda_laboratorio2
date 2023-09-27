@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "Codigos_retornos.h"
+#include "Pila.h"
 
 void ABB_initArbol(ArbolBB *arbol) {
     // inicia la raiz del arbol apuntando a un nodo externo
@@ -84,7 +85,7 @@ int ABB_baja(ArbolBB *arbol, Envio *elemento) {
     if (ABB_localizar(arbol,elemento->codigo_envio,&ubicacion,&ubicacion_puntero_padre) == LOCALIZACION_EXITOSA) {
         // si el envio es igual campo por campo
         if (Envio_sonIguales(elemento,&(ubicacion->envio))) {
-            // @todo : terminar
+            // @todo : agregar confirmacion por el usuario?
             // Caso: el nodo a eliminar tiene 2 hijos
             if (ubicacion->menores != NULL && ubicacion->mayores != NULL) {
                 //Se busca el menor de los mayores (y el puntero del padre)
@@ -135,4 +136,40 @@ int ABB_consulta(ArbolBB *arbol, char codigo_envio[], Envio *consultado) {
         return CONSULTA_EXITOSA;
     }
     else return CONSULTA_ERROR_NO_EXISTE;
+}
+
+
+int ABB_mostrarArbol_preorden(ArbolBB *arbol) {
+    // la funcion devuelve la cantidad de elementos recorridos del arbol
+    // (0 si el arbol esta vacio)
+
+    // se inicia el cursor en la raiz
+    ABB_Hoja *cursor_hoja = arbol->raiz;
+
+    // si el arbol no esta vacio
+    if (cursor_hoja != NULL) {
+        int contador = 0;
+        // se inicia una pila para almacenar punteros
+        Pila pila_punteros; Pila_init(&pila_punteros);
+
+        Pila_agregar(&pila_punteros, cursor_hoja);
+
+        // mientras la pila no este vacia
+        while (pila_punteros.tope > -1) {
+            // se quita el tope de la pila
+            Pila_quitar(&pila_punteros,&cursor_hoja);
+
+            // Impresion por pantalla
+            contador++;
+            ABB_imprimirHoja(cursor_hoja);
+
+            // se agrega la rama derecha a la pila, para recorrerse despues de la izquierda
+            if (cursor_hoja->mayores != NULL) Pila_agregar(&pila_punteros,cursor_hoja->mayores);
+            // se agrega la rama izq al ultimo, para ser la primera en revisarle
+            if (cursor_hoja->menores != NULL) Pila_agregar(&pila_punteros,cursor_hoja->menores);
+        }
+
+        return contador;
+    }
+    else return 0;
 }
