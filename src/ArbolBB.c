@@ -4,7 +4,6 @@
 #include <string.h>
 #include "Codigos_retornos.h"
 #include "Pila.h"
-#include "Costos.h"
 
 void ABB_initArbol(ArbolBB *arbol) {
     // inicia la raiz del arbol apuntando a un nodo externo

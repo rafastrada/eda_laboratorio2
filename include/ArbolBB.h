@@ -2,6 +2,7 @@
 #define ARBOLBB_H
 
 #include "Envio.h"
+#include "Costos.h"
 
 
 // definicion incompleta para reconocer el puntero hacia si mismo

@@ -46,6 +46,9 @@
 		<Unit filename="src/ArbolBB.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="src/Costos.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/Envio.c">
 			<Option compilerVar="CC" />
 		</Unit>
