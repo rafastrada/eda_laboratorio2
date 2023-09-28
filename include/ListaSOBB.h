@@ -30,6 +30,6 @@ int LSOBB_alta(ListaSOBB *,Envio *,Costos_estructura *);
 int LSOBB_baja(ListaSOBB *,Envio *,Costos_estructura *);
 
 // --- MOSTRAR LISTA
-int LSO_mostrarLista(ListaSO *);
+int LSOBB_mostrarLista(ListaSOBB *);
 
 #endif // LISTASOBB_H

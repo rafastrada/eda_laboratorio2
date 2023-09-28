@@ -117,6 +117,8 @@ int main()
     Costos_estructura_init(&envios_lso_costos); Costos_estructura_init(&envios_lsobb_costos); Costos_estructura_init(&envios_abb_costos);
     Costos_estructura_init(&envios_lso_costos_loc); Costos_estructura_init(&envios_lsobb_costos_loc); Costos_estructura_init(&envios_abb_costos_loc);
 
+    int hubo_memorizacion = 0;
+
     // INICIO DEL PROGRAMA
     char seleccion_usuario_menu_principal = ' '; // variable para guardar la opcion elegida por usuario
     do {
@@ -139,20 +141,21 @@ int main()
 
             // Comparar estructuras
             case '1': {
-                Lectura_Operaciones(&envios_lso, &envios_lsobb, &envios_abb,
-                                    &envios_lso_costos, &envios_lsobb_costos, &envios_abb_costos,
-                                    &envios_lso_costos_loc, &envios_lsobb_costos_loc, &envios_abb_costos_loc);
+                if (!hubo_memorizacion) {
+                    Lectura_Operaciones(&envios_lso, &envios_lsobb, &envios_abb,
+                                        &envios_lso_costos, &envios_lsobb_costos, &envios_abb_costos,
+                                        &envios_lso_costos_loc, &envios_lsobb_costos_loc, &envios_abb_costos_loc);
 
-                // Calculo de costos medios
-                Costos_estructura_calculoMedias(&envios_lso_costos);
-                Costos_estructura_calculoMedias(&envios_lsobb_costos);
-                Costos_estructura_calculoMedias(&envios_abb_costos);
-                Costos_estructura_calculoMedias(&envios_lso_costos_loc);
-                Costos_estructura_calculoMedias(&envios_lsobb_costos_loc);
-                Costos_estructura_calculoMedias(&envios_abb_costos_loc);
+                    // Calculo de costos medios
+                    Costos_estructura_calculoMedias(&envios_lso_costos);
+                    Costos_estructura_calculoMedias(&envios_lsobb_costos);
+                    Costos_estructura_calculoMedias(&envios_abb_costos);
+                    Costos_estructura_calculoMedias(&envios_lso_costos_loc);
+                    Costos_estructura_calculoMedias(&envios_lsobb_costos_loc);
+                    Costos_estructura_calculoMedias(&envios_abb_costos_loc);
 
-                float max = envios_abb_costos.Baja.maximo, medio = envios_abb_costos.Baja.media;
-
+                    hubo_memorizacion = 1;
+                }
                 // Impresion por pantalla
                 system("cls");
                 printf(PANTALLA_BARRA
@@ -213,21 +216,63 @@ int main()
                 break; // termina el switch
             }
             // Mostrar estructuras
-//            case '2': {
-//                // variable para respuesta de usuario
-//                char seleccion_usuario_menu_alta;
-//                int entrada_correcta;     // para controles
-//                do {
-//
-//
-//                    // Captura de respuesta del usuario
-//                    fflush(stdin); seleccion_usuario_menu_alta = getchar();
-//                    while (entradaDistintaSino(seleccion_usuario_menu_alta)) {
-//                        printf("\nDebe ingresar una entrada valida!\n[S/N] >> ");
-//                        fflush(stdin); seleccion_usuario_menu_alta = getchar();
-//                    }
-//                } while (seleccion_usuario_menu_alta == 's'); break; // termina el switch
-//            }
+            case '2': {
+                // si no hubo memorizacion realizada
+                if (hubo_memorizacion) {
+
+                    // variable para respuesta de usuario
+                    char seleccion_usuario_estructura;
+
+                    do {
+                        system("cls");
+                        printf(PANTALLA_BARRA
+                               "Mostrar estructuras\n"
+                               PANTALLA_BARRA
+                               "\nSeleccione la estructura que desea ver:\n"
+                               "1. LSO\n"
+                               "2. LSOBB\n"
+                               "3. ABB\n"
+                               "4. Volver al menu principal\n\n"
+                               "> ");
+
+
+                        // Captura de respuesta del usuario
+                        fflush(stdin); seleccion_usuario_estructura = getchar();
+
+                        system("cls");
+                        switch (seleccion_usuario_estructura) {
+                            case '1': {
+                                int cantidad = LSO_mostrarLista(&envios_lso);
+                                printf("\n\nSe han impreso %d Envios.\n", cantidad);
+                                system("pause");
+                                break;
+                            };
+                            case '2': {
+                                int cantidad = LSOBB_mostrarLista(&envios_lsobb);
+                                printf("\n\nSe han impreso %d Envios.\n", cantidad);
+                                system("pause");
+                                break;
+                            };
+                            case '3': {
+                                int cantidad = ABB_mostrarArbol_preorden(&envios_abb);
+                                printf("\n\nSe han impreso %d Nodos.\n", cantidad);
+                                system("pause");
+                                break;
+                            }
+                        }
+
+                    } while (seleccion_usuario_estructura == '4'); break; // termina el switch
+                } else {
+                    system("cls");
+                    printf(PANTALLA_BARRA
+                           "Mostrar estructuras\n"
+                           PANTALLA_BARRA
+                           "\nDebe realizar la memorizacion de las estructuras antes de continuar!\n"
+                           "Ejecute 'Comparar estructuras' en el menu principal\n\n"
+                           );
+                    system("pause");
+                }
+            }
 //            case '4':{
 //                system("cls");
 //                int resultado, repetidos = 0, cant, cargas;
