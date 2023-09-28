@@ -24,9 +24,9 @@ void LSOBB_init(ListaSOBB *);
 int LSOBB_localizar(ListaSOBB *,char [], int *,Costos_estructura *);
 
 // --- ALTA
-int LSOBB_alta(ListaSOBB *,Envio,Costos_estructura *);
+int LSOBB_alta(ListaSOBB *,Envio *,Costos_estructura *);
 
 // --- BAJA
-int LSOBB_baja(ListaSOBB *,char [],int (*)(Envio),Costos_estructura *);
+int LSOBB_baja(ListaSOBB *,Envio *,Costos_estructura *);
 
 #endif // LISTASOBB_H
