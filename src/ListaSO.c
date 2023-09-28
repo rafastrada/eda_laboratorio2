@@ -106,7 +106,7 @@ int LSO_baja(ListaSO *lista,Envio *elemento, Costos_estructura *costos) {
 
     if (exito_localizar == LOCALIZACION_EXITOSA) {
         // si el elemento localizado es igual campo por campo ...
-        if (Envio_sonIguales(elemento,lista->arreglo[posicion])) {
+        if (Envio_sonIguales(elemento,&(lista->arreglo[posicion]))) {
             int celdas_desplazadas = 0;
 
             for (int i=posicion; i<lista->limite_superior; i++) {

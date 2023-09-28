@@ -23,3 +23,21 @@ void Costos_estructura_init(Costos_estructura *costos) {
     costos->Baja.maximo = 0;
     costos->Baja.media = 0;
 };
+
+void Costos_estructura_calculoMedias(Costos_estructura *costos) {
+    costos->Localizacion_exitosa.media =
+    costos->Localizacion_exitosa.sumatoria_vector /
+    ((float)costos->Localizacion_exitosa.cantidad);
+
+    costos->Localizacion_fallida.media =
+    costos->Localizacion_fallida.sumatoria_vector /
+    ((float)costos->Localizacion_fallida.cantidad);
+
+    costos->Alta.media =
+    costos->Alta.sumatoria_vector /
+    ((float)costos->Alta.cantidad);
+
+    costos->Baja.media =
+    costos->Baja.sumatoria_vector /
+    ((float)costos->Baja.cantidad);
+}

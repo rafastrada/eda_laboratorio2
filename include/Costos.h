@@ -16,5 +16,6 @@ typedef struct {
 } Costos_estructura;
 
 void Costos_estructura_init(Costos_estructura *);
+void Costos_estructura_calculoMedias(Costos_estructura *);
 
 #endif // COSTOS_H

@@ -17,9 +17,9 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
 
     int salida = LOCALIZACION_ERROR_NO_EXISTE;
     // Para calculos de costos
-    int auxiliar[LISTASOBB_TAM_ARREGLO], i, celdas_consultadas, ;
+    int auxiliar[LISTASOBB_TAM_ARREGLO], i, celdas_consultadas;
 
-    for(i = 0; lista->limite_superior; i++){
+    for(i = 0; i <= lista->limite_superior; i++){
         auxiliar[i] = 0;
     }
 
@@ -114,7 +114,7 @@ int LSOBB_alta(ListaSOBB *lista, Envio *nuevo, Costos_estructura *costos) {
             }
 
             // Se agrega el nuevo elemento a la lista
-            lista->arreglo[posicion_nuevo] = nuevo;
+            lista->arreglo[posicion_nuevo] = *nuevo;
 
             // Se actualiza la salida
             salida = ALTA_EXITOSA;
@@ -137,11 +137,11 @@ int LSOBB_baja(ListaSOBB *lista,Envio *elemento, Costos_estructura *costos) {
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
-    exito_localizar = LSOBB_localizar(lista,codigo_envio,&posicion, costos);
+    exito_localizar = LSOBB_localizar(lista,elemento->codigo_envio,&posicion, costos);
 
     if (exito_localizar == LOCALIZACION_EXITOSA){
 
-        if(Envio_sonIguales(elemento, lista->arreglo[posicion])){
+        if(Envio_sonIguales(elemento, &(lista->arreglo[posicion]))){
             for (int i= posicion; i<lista->limite_superior; i++){
                 lista->arreglo[i] = lista->arreglo[i+1];
                 celdas_desplazadas++;

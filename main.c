@@ -7,12 +7,17 @@
 
 
 // --- CADENAS GLOBALES
-#define PANTALLA_BARRA "-----------------------------------------------------------------------\n"
+#define PANTALLA_BARRA "-----------------------------------------------------------------------------------\n"
 #define PANTALLA_PRINCIPAL_OPERACIONES "\
 1. Comparacion de Estructuras\n\
 2. Mostrar Estructura\n\
 3. Salir del programa\n"
 
+
+// codigos de operaciones
+#define CODOP_ALTA 1
+#define CODOP_BAJA 2
+#define CODOP_EVOCAR 3
 
 // --- DEFINICION DE MACROS
 // controla si una variable tipo 'char' es distinta de 's' y 'n' (util para entradas de tipo SI o NO)
@@ -31,33 +36,35 @@
                                  (E).dni_remitente,(E).nombre_apellido_remitente,\
                                  (E).fecha_envio,(E).fecha_recepcion);
 
-//memorizacion previa
 
-
-enum Memorizacion_previa {ERROR_ABRIR_FICHERO, MEMORIZACION_EXITOSA, MEMORIZACION_PARCIAL};
-
-int Lectura_Operaciones(int *cant_repetidos, int *cargados){
+int Lectura_Operaciones(ListaSO *lso, ListaSOBB *lsobb, ArbolBB *abb,
+                        Costos_estructura *lso_costos,
+                        Costos_estructura *lsobb_costos,
+                        Costos_estructura *abb_costos,
+                        Costos_estructura *lso_costos_loc,
+                        Costos_estructura *lsobb_costos_loc,
+                        Costos_estructura *abb_costos_loc
+                        ) {
     FILE *fichero;
-    int resultado, repetidos = 0, indice = 0, operacion;
+    int operacion, auxiliar;
+    ABB_Hoja *auxiliar1, **auxiliar2;       // para cumplir los parametros requeridos por la funcion localizar
 
     Envio nuevo_envio; Envio_init(&nuevo_envio); //variable temporal
 
     fichero = fopen("Operaciones-Envios.txt","r"); //abrir el archivo
-    if (fichero == NULL)
-
-        return ERROR_ABRIR_FICHERO;
+    if (fichero == NULL) return 0;
 
     else {
         while(!feof(fichero)){
 
             fscanf(fichero, "%d", &operacion);
 
-            if(operacion == 1 || operacion == 2){
+            fscanf(fichero," %[^\n]",nuevo_envio.codigo_envio);
+            strcpy(nuevo_envio.codigo_envio,strupr(nuevo_envio.codigo_envio));
 
-                fscanf(fichero," %[^\n]",nuevo_envio.codigo_envio);
-                strcpy(nuevo_envio.codigo_envio,strupr(nuevo_envio.codigo_envio));
+            if(operacion == CODOP_ALTA || operacion == CODOP_BAJA){
 
-                fscanf(fichero,"%d",&nuevo_envio.dni_receptor);
+                fscanf(fichero,"%u",&nuevo_envio.dni_receptor);
 
                 fscanf(fichero," %[^\n]",nuevo_envio.nombre_apellido_receptor);
                 strcpy(nuevo_envio.nombre_apellido_receptor,strupr(nuevo_envio.nombre_apellido_receptor));
@@ -65,7 +72,7 @@ int Lectura_Operaciones(int *cant_repetidos, int *cargados){
                 fscanf(fichero," %[^\n]",nuevo_envio.domicilio_receptor);
                 strcpy(nuevo_envio.domicilio_receptor,strupr(nuevo_envio.domicilio_receptor));
 
-                fscanf(fichero,"%d",&nuevo_envio.dni_remitente);
+                fscanf(fichero,"%u",&nuevo_envio.dni_remitente);
 
                 fscanf(fichero," %[^\n]",nuevo_envio.nombre_apellido_remitente);
                 strcpy(nuevo_envio.nombre_apellido_remitente,strupr(nuevo_envio.nombre_apellido_remitente));
@@ -74,54 +81,54 @@ int Lectura_Operaciones(int *cant_repetidos, int *cargados){
 
                 fscanf(fichero," %[^\n]",nuevo_envio.fecha_recepcion);
 
-                if(operacion == 1){
-                    resultado = LSO_alta( , nuevo_envio, );
-                    resultado = LSOBB_alta( , nuevo_envio, );
-                    resultado = ABB_alta( , nuevo_envio, );
-                }else{
-                    resultado = LSO_alta( , nuevo_envio, );
-                    resultado = LSOBB_alta( , nuevo_envio, );
-                    resultado = ABB_alta( , nuevo_envio, );
+                if(operacion == CODOP_ALTA) {
+                    LSO_alta(lso,&nuevo_envio,lso_costos);
+                    LSOBB_alta(lsobb,&nuevo_envio, lsobb_costos);
+                    ABB_alta(abb,&nuevo_envio, abb_costos);
+                } else {
+                    LSO_baja(lso, &nuevo_envio, lso_costos);
+                    LSOBB_baja(lsobb, &nuevo_envio, lsobb_costos);
+                    ABB_baja(abb, &nuevo_envio, abb_costos);
                 }
+            } else if (operacion == CODOP_EVOCAR) {
+                LSO_localizar(lso,nuevo_envio.codigo_envio,&auxiliar, lso_costos_loc);
+                LSOBB_localizar(lsobb, nuevo_envio.codigo_envio, &auxiliar, lsobb_costos_loc);
+                ABB_localizar(abb, nuevo_envio.codigo_envio, &auxiliar1, &auxiliar2, abb_costos_loc);
             }
 
-            if (resultado_alta == ALTA_ERROR_LISTA_LLENA){
-                fclose(fichero);
-                break;
-            }
-            if (resultado_alta == ALTA_ERROR_CODIGO_EXISTENTE){
-                repetidos ++;
-            }
-            indice ++;
         }
     }
 
-    *cargados = indice;
-    *cant_repetidos = repetidos;
     fclose(fichero);
 
-    if(resultado_alta == ALTA_ERROR_LISTA_LLENA){
-        return MEMORIZACION_PARCIAL;
-    }
-    return MEMORIZACION_EXITOSA;
+    return 1;
 }
 
 int main()
 {
-    // Declaracion e inicializacion de la estructura LISTA
-    Lista lista_envios; Lista_init(&lista_envios);
+    // Declaracion e inicializacion de las estructuras
+    ListaSO envios_lso; LSO_init(&envios_lso);
+    ListaSOBB envios_lsobb; LSOBB_init(&envios_lsobb);
+    ArbolBB envios_abb; ABB_initArbol(&envios_abb);
+
+    // Costos de cada estructura
+    Costos_estructura envios_lso_costos, envios_lsobb_costos, envios_abb_costos,
+    envios_lso_costos_loc, envios_lsobb_costos_loc, envios_abb_costos_loc;
+    Costos_estructura_init(&envios_lso_costos); Costos_estructura_init(&envios_lsobb_costos); Costos_estructura_init(&envios_abb_costos);
+    Costos_estructura_init(&envios_lso_costos_loc); Costos_estructura_init(&envios_lsobb_costos_loc); Costos_estructura_init(&envios_abb_costos_loc);
 
     // INICIO DEL PROGRAMA
     char seleccion_usuario_menu_principal = ' '; // variable para guardar la opcion elegida por usuario
     do {
         system("cls");  // limpa la pantalla
 
-        printf("%sEL REVOLEO\tAdministracion de envios\n%s"
+        printf(PANTALLA_BARRA
+               "EL REVOLEO\tAdministracion de envios\n"
+               PANTALLA_BARRA
                "MENU PRINCIPAL\nElija una operacion:\n\n"
-               "%s\n"
-               ">> ",
-               PANTALLA_BARRA,PANTALLA_BARRA,
-               PANTALLA_PRINCIPAL_OPERACIONES);
+               PANTALLA_PRINCIPAL_OPERACIONES
+               "\n"
+               ">> ");
 
         // Se captura la opcion ingresada por el usuario
         fflush(stdin); seleccion_usuario_menu_principal = getchar();
@@ -130,77 +137,127 @@ int main()
         // ----------------------------------------------------------
         switch (seleccion_usuario_menu_principal) {
 
-            // Buscar un envio por CODIGO DE ENVIO
+            // Comparar estructuras
             case '1': {
-                // variables para ambito de funcion de consulta
-                char seleccion_usuario_menu_buscar, codigo_envio[ENVIO_TAM_CODIGO_DE_ENVIO];
-                int resultado_consulta, entrada_correcta;
-                Envio envio_consultado;
+                Lectura_Operaciones(&envios_lso, &envios_lsobb, &envios_abb,
+                                    &envios_lso_costos, &envios_lsobb_costos, &envios_abb_costos,
+                                    &envios_lso_costos_loc, &envios_lsobb_costos_loc, &envios_abb_costos_loc);
 
-                do {
-                    // Imprime pantalla
-                    system("cls");
-                    printf(PANTALLA_BARRA
-                           "Buscar un ENVIO por su CODIGO\n"
-                           PANTALLA_BARRA
-                           "Ingrese el CODIGO del ENVIO que desea consultar >>\t");
+                // Calculo de costos medios
+                Costos_estructura_calculoMedias(&envios_lso_costos);
+                Costos_estructura_calculoMedias(&envios_lsobb_costos);
+                Costos_estructura_calculoMedias(&envios_abb_costos);
+                Costos_estructura_calculoMedias(&envios_lso_costos_loc);
+                Costos_estructura_calculoMedias(&envios_lsobb_costos_loc);
+                Costos_estructura_calculoMedias(&envios_abb_costos_loc);
 
+                float max = envios_abb_costos.Baja.maximo, medio = envios_abb_costos.Baja.media;
 
-
-                    //Captura de respuesta de usuario
-                    fflush(stdin); seleccion_usuario_menu_buscar = getchar();
-                    while (entradaDistintaSino(seleccion_usuario_menu_buscar)) {
-                        printf("\nDebe ingresar una entrada valida!\n[S/N] >> ");
-                        fflush(stdin); seleccion_usuario_menu_buscar = getchar();
-                    }
-                } while (seleccion_usuario_menu_buscar == 's'); break; // termina el switch
-            }
-            // Agregar un nuevo ENVIO
-            case '2': {
-                // variable para respuesta de usuario
-                char seleccion_usuario_menu_alta;
-                int entrada_correcta;     // para controles
-                do {
-
-
-                    // Captura de respuesta del usuario
-                    fflush(stdin); seleccion_usuario_menu_alta = getchar();
-                    while (entradaDistintaSino(seleccion_usuario_menu_alta)) {
-                        printf("\nDebe ingresar una entrada valida!\n[S/N] >> ");
-                        fflush(stdin); seleccion_usuario_menu_alta = getchar();
-                    }
-                } while (seleccion_usuario_menu_alta == 's'); break; // termina el switch
-            }
-            case '4':{
+                // Impresion por pantalla
                 system("cls");
-                int resultado, repetidos = 0, cant, cargas;
-                resultado = Memorizacion_previa(&lista_envios, &repetidos, &cargas);
+                printf(PANTALLA_BARRA
+                       "Comparacion de esfuerzos de estructuras\n"
+                       PANTALLA_BARRA
+                       "\n'N' es el tamaño del vector de costo correspondiente.\n\n"
+                       "\t\t| N = %u\t| N = %u\t| N = %u\t| N = %u\t|\n"
+                       "\n\t\t|\t Esfuerzo Maximo\t\t\t\t\t|\n"
+                       "\t\t|\t Localizacion\t\t|\t\t|\t\t|\n"
+                       "\t\t| Exitosa\t| Fracaso\t| Alta Ex\t| Baja Ex\t|\n"
+                       "LSO:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
+                       "LSOBB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
+                       "ABB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
 
-                if(resultado == MEMORIZACION_EXITOSA){
-                    printf("La memorizacion fue exitosa.\n\n");
-                }
-                if(resultado == MEMORIZACION_PARCIAL){
-                    printf("La memorizacion fue exitosa parcialmente.\n La cantidad de envios en el archivo era mayor al maximo de la lista\n\n ");
-                }
-                if(resultado == ERROR_ABRIR_FICHERO) {
-                    printf("Existe un problema al intentar abrir el archivo.\n Por favor revisar el archivo \"Envios.txt\" \n");
-                }
-                if(resultado != ERROR_ABRIR_FICHERO) {
-                    printf("Se intentaron cargar %d Envios \n", cargas);
-                    printf("De los cuales:\n \t Envios repetidos: %d \n \t Envios cargados correctamente: %d \n ", repetidos, cargas - repetidos);
-                }
+                       "\n\t\t|\t Esfuerzo Medio\t\t\t\t\t\t|\n"
+                       "\t\t|\t Localizacion\t\t|\t\t|\t\t|\n"
+                       "\t\t| Exitosa\t| Fracaso\t| Alta Ex\t| Baja Ex\t|\n"
+                       "LSO:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
+                       "LSOBB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
+                       "ABB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
+                       "\n\n",
+                       envios_lso_costos_loc.Localizacion_exitosa.cantidad,
+                       envios_lso_costos_loc.Localizacion_fallida.cantidad,
+                       envios_lso_costos.Alta.cantidad,
+                       envios_lso_costos.Baja.cantidad,
 
-            system("pause"); break;
+                       envios_lso_costos_loc.Localizacion_exitosa.maximo,
+                       envios_lso_costos_loc.Localizacion_fallida.maximo,
+                       envios_lso_costos.Alta.maximo,
+                       envios_lso_costos.Baja.maximo,
+
+                       envios_lsobb_costos_loc.Localizacion_exitosa.maximo,
+                       envios_lsobb_costos_loc.Localizacion_fallida.maximo,
+                       envios_lsobb_costos.Alta.maximo,
+                       envios_lsobb_costos.Baja.maximo,
+
+                       envios_abb_costos_loc.Localizacion_exitosa.maximo,
+                       envios_abb_costos_loc.Localizacion_fallida.maximo,
+                       envios_abb_costos.Alta.maximo,
+                       envios_abb_costos.Baja.maximo,
+
+                       envios_lso_costos_loc.Localizacion_exitosa.media,
+                       envios_lso_costos_loc.Localizacion_fallida.media,
+                       envios_lso_costos.Alta.media,
+                       envios_lso_costos.Baja.media,
+
+                       envios_lsobb_costos_loc.Localizacion_exitosa.media,
+                       envios_lsobb_costos_loc.Localizacion_fallida.media,
+                       envios_lsobb_costos.Alta.media,
+                       envios_lsobb_costos.Baja.media,
+
+                       envios_abb_costos_loc.Localizacion_exitosa.media,
+                       envios_abb_costos_loc.Localizacion_fallida.media,
+                       envios_abb_costos.Alta.media,
+                       envios_abb_costos.Baja.media
+                       );
+                system("pause");
+                break; // termina el switch
             }
-
-            case '5':{
-            system("cls");
-            printf(
-                           "%sMostrando Estructura\n%s\n",
-                           PANTALLA_BARRA,PANTALLA_BARRA);
-            Mostrar_Lista(lista_envios);
-            system("pause");
-            }
+            // Mostrar estructuras
+//            case '2': {
+//                // variable para respuesta de usuario
+//                char seleccion_usuario_menu_alta;
+//                int entrada_correcta;     // para controles
+//                do {
+//
+//
+//                    // Captura de respuesta del usuario
+//                    fflush(stdin); seleccion_usuario_menu_alta = getchar();
+//                    while (entradaDistintaSino(seleccion_usuario_menu_alta)) {
+//                        printf("\nDebe ingresar una entrada valida!\n[S/N] >> ");
+//                        fflush(stdin); seleccion_usuario_menu_alta = getchar();
+//                    }
+//                } while (seleccion_usuario_menu_alta == 's'); break; // termina el switch
+//            }
+//            case '4':{
+//                system("cls");
+//                int resultado, repetidos = 0, cant, cargas;
+//                resultado = Memorizacion_previa(&lista_envios, &repetidos, &cargas);
+//
+//                if(resultado == MEMORIZACION_EXITOSA){
+//                    printf("La memorizacion fue exitosa.\n\n");
+//                }
+//                if(resultado == MEMORIZACION_PARCIAL){
+//                    printf("La memorizacion fue exitosa parcialmente.\n La cantidad de envios en el archivo era mayor al maximo de la lista\n\n ");
+//                }
+//                if(resultado == ERROR_ABRIR_FICHERO) {
+//                    printf("Existe un problema al intentar abrir el archivo.\n Por favor revisar el archivo \"Envios.txt\" \n");
+//                }
+//                if(resultado != ERROR_ABRIR_FICHERO) {
+//                    printf("Se intentaron cargar %d Envios \n", cargas);
+//                    printf("De los cuales:\n \t Envios repetidos: %d \n \t Envios cargados correctamente: %d \n ", repetidos, cargas - repetidos);
+//                }
+//
+//            system("pause"); break;
+//            }
+//
+//            case '5':{
+//            system("cls");
+//            printf(
+//                           "%sMostrando Estructura\n%s\n",
+//                           PANTALLA_BARRA,PANTALLA_BARRA);
+//            Mostrar_Lista(lista_envios);
+//            system("pause");
+//            }
         }
 
     } while (seleccion_usuario_menu_principal != '3');

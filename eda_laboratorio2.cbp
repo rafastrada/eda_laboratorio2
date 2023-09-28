@@ -33,6 +33,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Operaciones-Envios.txt" />
 		<Unit filename="include/ArbolBB.h" />
 		<Unit filename="include/Codigos_retornos.h" />
 		<Unit filename="include/Costos.h" />
