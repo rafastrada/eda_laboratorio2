@@ -102,7 +102,7 @@ int LSO_baja(ListaSO *lista,Envio *elemento, Costos_estructura *costos) {
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
-    exito_localizar = LSO_localizar(lista,codigo_envio,&posicion,costos);
+    exito_localizar = LSO_localizar(lista,elemento->codigo_envio,&posicion,costos);
 
     if (exito_localizar == LOCALIZACION_EXITOSA) {
         // si el elemento localizado es igual campo por campo ...
