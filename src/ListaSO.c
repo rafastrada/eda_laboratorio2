@@ -65,7 +65,7 @@ int LSO_alta(ListaSO *lista, Envio *nuevo, Costos_estructura *costos) {
     // Se procesa el ALTA
     if (exito_localizar == LOCALIZACION_ERROR_NO_EXISTE) {
         // Si la lista NO esta llena
-        if (!(lista->limite_superior >= (LISTA_TAM_ARREGLO - 1))) {
+        if (!(lista->limite_superior >= (LSO_TAM_ARREGLO - 1))) {
             // Se actualiza el limite superior
             lista->limite_superior++;
 
@@ -102,7 +102,7 @@ int LSO_baja(ListaSO *lista,Envio *elemento, Costos_estructura *costos) {
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
-    exito_localizar = LSO_localizar(lista,codigo_envio,&posicion,costos);
+    exito_localizar = LSO_localizar(lista,elemento->codigo_envio,&posicion,costos);
 
     if (exito_localizar == LOCALIZACION_EXITOSA) {
         // si el elemento localizado es igual campo por campo ...
@@ -130,3 +130,16 @@ int LSO_baja(ListaSO *lista,Envio *elemento, Costos_estructura *costos) {
     return salida;
 }
 
+int LSO_mostrarLista(ListaSO *lista) {
+    // La funcion devuelve la cantidad de elementos de la lista
+    if (lista->limite_superior > -1) {
+        for (int i = 0; i<= lista->limite_superior; i++){
+            Envio_imprimir(lista->arreglo[i]);
+            // muestra de a 5 elementos en la lista
+            if ((i+1 % 5) == 0) system("pause");
+        }
+
+        return lista->limite_superior + 1;
+    }
+    else return 0;
+}
