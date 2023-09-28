@@ -186,6 +186,9 @@ int ABB_mostrarArbol_preorden(ArbolBB *arbol) {
 		else codigo_menor = texto_null;
             ABB_imprimirHoja(cursor_hoja,codigo_menor,codigo_mayor);
 
+            //se muestra de a 5 elementos del arbol
+            if (contador % 5 == 0) system("pause");
+
             // se agrega la rama derecha a la pila, para recorrerse despues de la izquierda
             if (cursor_hoja->mayores != NULL) Pila_agregar(&pila_punteros,cursor_hoja->mayores);
             // se agrega la rama izq al ultimo, para ser la primera en revisarle

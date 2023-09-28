@@ -30,5 +30,7 @@ int LSO_alta(ListaSO *,Envio *, Costos_estructura *);
 // --- BAJA
 int LSO_baja(ListaSO *,char [], Costos_estructura *);
 
+void LSO_mostrarLista(ListaSO *);
+
 
 #endif // LISTASO_H
