@@ -182,7 +182,7 @@ int ABB_mostrarArbol_preorden(ArbolBB *arbol) {
             contador++;
 		if (cursor_hoja->mayores != NULL) codigo_mayor = (cursor_hoja->mayores->envio).codigo_envio;
 		else codigo_mayor = texto_null;
-		if (cursor_hoja->menores != NULL) codigo_menor = (cursor_hoja->mayores->envio).codigo_envio;
+		if (cursor_hoja->menores != NULL) codigo_menor = (cursor_hoja->menores->envio).codigo_envio;
 		else codigo_menor = texto_null;
             ABB_imprimirHoja(cursor_hoja,codigo_menor,codigo_mayor);
 
