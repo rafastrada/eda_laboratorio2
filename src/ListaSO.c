@@ -65,7 +65,7 @@ int LSO_alta(ListaSO *lista, Envio *nuevo, Costos_estructura *costos) {
     // Se procesa el ALTA
     if (exito_localizar == LOCALIZACION_ERROR_NO_EXISTE) {
         // Si la lista NO esta llena
-        if (!(lista->limite_superior >= (LISTA_TAM_ARREGLO - 1))) {
+        if (!(lista->limite_superior >= (LSO_TAM_ARREGLO - 1))) {
             // Se actualiza el limite superior
             lista->limite_superior++;
 

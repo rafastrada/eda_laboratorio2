@@ -6,12 +6,12 @@
 #include "Costos.h"
 
 // Constantes
-#define LISTA_TAM_ARREGLO 300
+#define LSO_TAM_ARREGLO 300
 
 // Definicion de la lista
 // (el orden de la lista es CRECIENTE)
 typedef struct {
-    Envio arreglo[LISTA_TAM_ARREGLO];
+    Envio arreglo[LSO_TAM_ARREGLO];
 
     // Indice del ultimo elemento en la lista
     // (Si la lista esta vacia, entonces vale -1)
