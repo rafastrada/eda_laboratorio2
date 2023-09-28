@@ -1,3 +1,35 @@
+/*
+Numero de grupo: 9
+
+Integrantes:
+- Alan Ezequiel Bernal
+- Guillermo Estrada Dubor
+
+
+Resultados de la comparacion de las estructuras:
+                |        Esfuerzo Maximo                                        |
+                |        Localizacion           |               |               |
+                | Exitosa       | Fracaso       | Alta Ex       | Baja Ex       |
+LSO:                    60.00           42.00           58.00           47.00
+LSOBB:                  5.00            5.00            58.00           47.00
+ABB:                    12.00           11.00           1.50            1.50
+                |        Esfuerzo Medio                                         |
+                |        Localizacion           |               |               |
+                | Exitosa       | Fracaso       | Alta Ex       | Baja Ex       |
+LSO:                    23.97           16.75           15.07           16.77
+LSOBB:                  4.59            4.00            15.07           16.77
+ABB:                    5.71            6.27            1.50            0.98
+
+En base a los resultados obtenidos de los esfuerzos de las estructuras, podemos observar
+que el Arbol Binario de Busqueda tiene costos casi constantes para las operaciones de
+Altas y Bajas. En cuanto a la localizacion, aunque la Lista secuencial ordenada con Busqueda Binaria
+tiene los maximos mas bajos, las medias del ABB y la LSOBB son muy proximas.
+Tambien se puede observar que el desempeño de la LSO es la menos optima para las operaciones
+realizadas sobre las estructuras.
+
+*/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -135,7 +135,7 @@ int LSOBB_alta(ListaSOBB *lista, Envio *nuevo, Costos_estructura *costos) {
 int LSOBB_baja(ListaSOBB *lista,Envio *elemento, Costos_estructura *costos) {
 
     int posicion, salida = BAJA_ERROR_NO_EXISTE;
-    int exito_localizar, celdas_desplazadas;
+    int exito_localizar, celdas_desplazadas = 0;
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
