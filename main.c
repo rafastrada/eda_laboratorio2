@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Envio.h"
+
 #include "ListaSO.h"
+#include "ListaSOBB.h"
+#include "ArbolBB.h"
 
 
 // --- CADENAS GLOBALES
@@ -102,45 +104,6 @@ int Lectura_Operaciones(int *cant_repetidos, int *cargados){
         return MEMORIZACION_PARCIAL;
     }
     return MEMORIZACION_EXITOSA;
-}
-
-//Mostrar Lista
-void Mostrar_Lista(Lista lista){
-    int cantidad_envios = lista.limite_superior, contador = 0;
-    if(cantidad_envios > -1){
-        for(contador; contador <= cantidad_envios; contador++){
-            printf("\nPosicion %d\n%s", contador, PANTALLA_BARRA);
-            imprimirEnvio(lista.arreglo[contador]);
-            if(contador % 5 == 0 && contador != 0){
-                system("pause");
-            }
-        }
-    }else{
-    printf("La lista esta vacia\n\n");
-    }
-}
-
-// Funcion para manejar la confirmacion de una BAJA
-int confirmacionBaja(Envio envio) {
-    // La funcion devuelve 1 si se ha confirmado la BAJA
-    //                      0 si se ha cancelado
-
-    printf("\nSe ha encontrado el Envio solicitado, se imprime a continuacion...\n\n");
-    imprimirEnvio(envio);
-
-    printf("\nEsta seguro que quiere eliminarlo? [S/N] >> ");
-
-    //captura de la entrada del usuario
-    fflush(stdin);
-    char seleccion_usuario = getchar();
-
-    while (entradaDistintaSino(seleccion_usuario)) {
-        printf("\nDebe ingresar una entrada valida!\n[S/N] >> ");
-        fflush(stdin); seleccion_usuario = getchar();
-    }
-
-    if (seleccion_usuario == 's') return 1;
-    else return 0;
 }
 
 int main()
