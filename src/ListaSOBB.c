@@ -10,16 +10,17 @@ void LSOBB_init(ListaSOBB *lista) {
 /*Para la lista con busqueda binaria (LSOBB) la consigna a utilizar sera biseccion, lımite inferior exclusivo, lımite
 superior inclusivo, testigo y segmento mas grande a la derecha.*/
 
-int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, *costos) {
+int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_estructura *costos) {
     // Busca en 'lista' el elemento con el campo 'codigo_envio',
     // si lo encuentra, la funcion devuelve el indice del arreglo,
     // si el elemento no se encuentra en la lista, devuelve la posicion donde deberia encontrarse.
 
+    int salida = LOCALIZACION_ERROR_NO_EXISTE;
     // Para calculos de costos
-    int celdas_consultadas[lista->limite_superior], i, aux;
+    int auxiliar[LISTASOBB_TAM_ARREGLO], i, celdas_consultadas, ;
 
     for(i = 0; lista->limite_superior; i++){
-        celdas_consultadas[i] = 0;
+        auxiliar[i] = 0;
     }
 
     // Limite inferior exclusivo
@@ -45,28 +46,46 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, *costo
 
         //Actualizando testigo
         m = ceil((li + 1 + ls) / 2.0);
-        celdas_consultadas[m] = 1;
+
+        if(auxiliar[m] != 1){
+            celdas_consultadas ++;
+            auxiliar[m] = 1;
+        }
     }
 
-    celdas_consultadas[m] = 1;
-    *costos = celdas_consultadas;
+    // Suma otra celda consultada por la proxima comparacion
+    if(auxiliar[m] != 1){
+        celdas_consultadas ++;
+        auxiliar[m] = 1;
+    }
 
-    // Si codigo de envio es igual a el codigo de envio de arreglo(i)
+    // Si codigo de envio es igual a el codigo de envio de arreglo(m)
     if (strcmp(lista->arreglo[m].codigo_envio,codigo_envio) == 0) {
 
         // Pasa ubicacion por parametro
         *contador = m;
-        return LOCALIZACION_EXITOSA;
+        salida = LOCALIZACION_EXITOSA;
+
+        // costos de exito de localizacion
+        (costos->Localizacion_exitosa.cantidad)++;
+        costos->Localizacion_exitosa.sumatoria_vector += celdas_consultadas;
+        if (costos->Localizacion_exitosa.maximo < celdas_consultadas) costos->Localizacion_exitosa.maximo = celdas_consultadas;
 
     }else{
 
-        // Si el codigo de envio es menor al codigo de arreglo(i)
+        // Si el codigo de envio es menor al codigo de arreglo(m)
         if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0)
             *contador = m;
         else
             *contador = m + 1;
+
+        // costos de fracaso de localizacion
+        (costos->Localizacion_fallida.cantidad)++;
+        costos->Localizacion_fallida.sumatoria_vector += celdas_consultadas;
+        if (costos->Localizacion_fallida.maximo < celdas_consultadas) costos->Localizacion_fallida.maximo = celdas_consultadas;
     }
-    return LOCALIZACION_ERROR_NO_EXISTE;
+
+    return salida;
 }
 
 
@@ -75,22 +94,23 @@ int LSOBB_alta(ListaSOBB *lista, Envio *nuevo, Costos_estructura *costos) {
     // Variable de retorno
     int salida = ALTA_ERROR_LISTA_LLENA;
     // Variable de exito de localizar
-    int posicion_nuevo;
+    int posicion_nuevo, celdas_desplazadas = 0;
 
     // Comprueba si existe un ENVIO con CODIGO DE ENVIO similar
     // y obtiene la posicion en donde deberia ir el elemento
-    int exito_localizar = LSO_localizar(lista,nuevo->codigo_envio,&posicion_nuevo,);
+    int exito_localizar = LSOBB_localizar(lista,nuevo->codigo_envio,&posicion_nuevo, costos);
 
     // Se procesa el ALTA
     if (exito_localizar == LOCALIZACION_ERROR_NO_EXISTE) {
         // Si la lista NO esta llena
-        if (!(lista->limite_superior >= (LISTA_TAM_ARREGLO - 1))) {
+        if (!(lista->limite_superior >= (LISTASOBB_TAM_ARREGLO - 1))) {
             // Se actualiza el limite superior
             lista->limite_superior++;
 
             // Se desplazan los elementos hacia la derecha
             for (int i=lista->limite_superior; i > posicion_nuevo; i--) {
                 lista->arreglo[i] = lista->arreglo[i-1];
+                celdas_desplazadas ++;
             }
 
             // Se agrega el nuevo elemento a la lista
@@ -98,6 +118,10 @@ int LSOBB_alta(ListaSOBB *lista, Envio *nuevo, Costos_estructura *costos) {
 
             // Se actualiza la salida
             salida = ALTA_EXITOSA;
+            (costos->Alta.cantidad)++;
+            costos->Alta.sumatoria_vector += celdas_desplazadas;
+            if (costos->Alta.maximo < celdas_desplazadas) costos->Alta.maximo = celdas_desplazadas;
+
         }
     }
     else salida = ALTA_ERROR_CODIGO_EXISTENTE;
@@ -113,7 +137,7 @@ int LSOBB_baja(ListaSOBB *lista,Envio *elemento, Costos_estructura *costos) {
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
-    exito_localizar = LSOBB_localizar(lista,codigo_envio,&posicion);
+    exito_localizar = LSOBB_localizar(lista,codigo_envio,&posicion, costos);
 
     if (exito_localizar == LOCALIZACION_EXITOSA){
 
@@ -128,8 +152,8 @@ int LSOBB_baja(ListaSOBB *lista,Envio *elemento, Costos_estructura *costos) {
             // Actualiza el valor de salida
             salida = BAJA_EXITOSA;
             (costos->Baja.cantidad)++;
-            costos->Baja.sumatoria_vector += celdas_consultadas;
-            if (costos->Baja.maximo < celdas_consultadas) costos->Baja.maximo = celdas_consultadas;
+            costos->Baja.sumatoria_vector += celdas_desplazadas;
+            if (costos->Baja.maximo < celdas_desplazadas) costos->Baja.maximo = celdas_desplazadas;
         }
     }
     return salida;
