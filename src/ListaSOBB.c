@@ -159,3 +159,15 @@ int LSOBB_baja(ListaSOBB *lista,Envio *elemento, Costos_estructura *costos) {
     return salida;
 }
 
+int LSOBB_mostrarLista(ListaSOBB *lista) {
+    // La funcion devuelve la cantidad de elementos de la lista
+    if (lista->limite_superior > -1) {
+        for (int i = 0; i<= lista->limite_superior; i++){
+            Envio_imprimir(lista->arreglo[i]);
+            // muestra de a 5 elementos en la lista
+            if ((i+1 % 5) == 0) system("pause");
+        }
+
+        return lista->limite_superior + 1;
+    }
+
