@@ -5,11 +5,13 @@
 
 1695593612 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\envio.h
 
-1695593612 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\arbolbb.c
+1695852075 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\arbolbb.c
 	"ArbolBB.h"
 	<stdlib.h>
 	<stdio.h>
+	<string.h>
 	"Codigos_retornos.h"
+	"Pila.h"
 
 1695502120 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\listaso.c
 	"ListaSO.h"
@@ -26,8 +28,9 @@
 	"stdlib.h"
 	"Codigos_retornos.h"
 
-1695501696 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\listasobb.h
+1695861306 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\listasobb.h
 	"Envio.h"
+	"Costos.h"
 
 1695739032 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\main.c
 	<stdio.h>
@@ -74,6 +77,18 @@
 	<stdio.h>
 	"Codigos_retornos.h"
 
-1695593612 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\arbolbb.h
+1695852075 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\arbolbb.h
 	"Envio.h"
+	"Costos.h"
+
+1695852075 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\costos.h
+
+1695852075 c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\include\pila.h
+	"ArbolBB.h"
+
+1695852075 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\costos.c
+	"Costos.h"
+
+1695852075 source:c:\users\usuario\desktop\facultad\2ºaño\eda\laboratorios\eda_laboratorio2\src\pila.c
+	"Pila.h"
 

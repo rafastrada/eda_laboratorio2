@@ -11,22 +11,25 @@ void LSOBB_init(ListaSOBB *lista) {
 /*Para la lista con busqueda binaria (LSOBB) la consigna a utilizar sera biseccion, lımite inferior exclusivo, lımite
 superior inclusivo, testigo y segmento mas grande a la derecha.*/
 
-int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador) {
+int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *costos) {
     // Busca en 'lista' el elemento con el campo 'codigo_envio',
     // si lo encuentra, la funcion devuelve el indice del arreglo,
     // si el elemento no se encuentra en la lista, devuelve la posicion donde deberia encontrarse.
+
+    // Para calculos de costos
+    int celdas_consultadas, i, aux;
 
     // Limite inferior exclusivo
     int li = -1;
 
     // Limite superior inclusivo
-    int ls = lista-> limite_superior + 1;
+    int ls = lista->limite_superior + 1;
 
     // Testigo: (limite inferior + 1), limite superior
     int m = ceil((li + 1 + ls) / 2.0);
 
     // Mientras el limite inferior sea menor al limite superior
-    while (li+1 < ls) {
+    while (li + 1 < ls) {
 
         //Si el codigo de envio es menor al codigo de arreglo(m)
         if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0) {
@@ -39,8 +42,11 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador) {
 
         //Actualizando testigo
         m = ceil((li + 1 + ls) / 2.0);
-
+        celdas_consultadas ++;
     }
+
+    celdas_consultadas ++;
+    *costos = celdas_consultadas;
 
     // Si codigo de envio es igual a el codigo de envio de arreglo(i)
     if (strcmp(lista->arreglo[m].codigo_envio,codigo_envio) == 0) {
@@ -55,7 +61,7 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador) {
         if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0)
             *contador = m;
         else
-            *contador = m+1;
+            *contador = m + 1;
     }
     return LOCALIZACION_ERROR_NO_EXISTE;
 }
@@ -70,7 +76,7 @@ int LSOBB_alta(ListaSOBB *lista, Envio nuevo) {
 
     // Comprueba si existe un ENVIO con CODIGO DE ENVIO similar
     // y obtiene la posicion en donde deberia ir el elemento
-    int exito_localizar = LSO_localizar(lista,nuevo.codigo_envio,&posicion_nuevo);
+    int exito_localizar = LSO_localizar(lista,nuevo.codigo_envio,&posicion_nuevo,);
 
     // Se procesa el ALTA
     if (exito_localizar == LOCALIZACION_ERROR_NO_EXISTE) {
@@ -104,7 +110,7 @@ int LSOBB_baja(ListaSOBB *lista,char codigo_envio[], int (*manejo_confirmacion)(
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
-    posicion = LSO_localizar(lista,codigo_envio,&exito_localizar);
+    exito_localizar = LSO_localizar(lista,codigo_envio,&posicion);
 
     if (exito_localizar == LOCALIZACION_EXITOSA) {
         int confirmacion = 1;
@@ -135,7 +141,7 @@ int LSOBB_modificacion(ListaSOBB *lista,char codigo_envio[],int (*manejo_remplaz
     int posicion, exito_localizar, salida = MODIFICACION_CANCELADA; // salida por defecto
 
     // Se busca el 'codigo_envio' en la lista
-    posicion = LSO_localizar(lista,codigo_envio,&exito_localizar);
+    exito_localizar = LSO_localizar(lista,codigo_envio,&posicion);
 
     // Si existe el elemento, se procesa la modificacion
     if (exito_localizar == LOCALIZACION_EXITOSA) {
@@ -167,7 +173,7 @@ int LSOBB_consulta(ListaSOBB *lista, char codigo_envio[], Envio *consultado) {
     int posicion, exito_localizar, salida = CONSULTA_ERROR_NO_EXISTE;
 
     // Se busca el elemento en la lista, y se captura su posicion
-    posicion = LSO_localizar(lista,codigo_envio,&exito_localizar);
+    exito_localizar = LSO_localizar(lista,codigo_envio,&posicion);
 
     // Si el elemento existe, se procesa.
     // Caso contrario la funcion continua y retorna 'CONSULTA_ERROR_NO_EXISTE'

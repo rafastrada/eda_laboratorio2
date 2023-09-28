@@ -2,6 +2,7 @@
 #define LISTASOBB_H
 
 #include "Envio.h"
+#include "Costos.h"
 
 // Constantes
 #define LISTA_TAM_ARREGLO 300
@@ -20,18 +21,18 @@ typedef struct {
 void LSOBB_init(ListaSOBB *);
 
 // --- LOCALIZAR
-int LSOBB_localizar(ListaSOBB *,char [], int *);
+int LSOBB_localizar(ListaSOBB *,char [], int *,int *);
 
 // --- ALTA
-int LSOBB_alta(ListaSOBB *,Envio);
+int LSOBB_alta(ListaSOBB *,Envio,Costos_estructura *);
 
 // --- BAJA
-int LSOBB_baja(ListaSOBB *,char [],int (*)(Envio));
+int LSOBB_baja(ListaSOBB *,char [],int (*)(Envio),Costos_estructura *);
 
 // --- MODIFICAR
 int LSOBB_modificacion(ListaSOBB *,char [], int (*)(Envio *));
 
 // --- CONSULTA
-int LSOBB_consulta(ListaSOBB *, char [],Envio *);
+int LSOBB_consulta(ListaSOBB *, char [],Envio *,Costos_estructura *);
 
 #endif // LISTASOBB_H
