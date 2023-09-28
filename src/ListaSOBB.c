@@ -30,10 +30,10 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
     int ls = lista->limite_superior;
 
     // Testigo: (limite inferior + 1), limite superior
-    int m = ceil((li + 1 + ls) / 2.0);
+    int m = ceil(((li + 1) + ls) / 2.0);
 
     // Mientras el limite inferior sea menor al limite superior
-    while (li + 1 < ls) {
+    while ((li + 1) < ls) {
 
         //Si el codigo de envio es menor al codigo de arreglo(m)
         if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0) {
@@ -45,7 +45,7 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
         }
 
         //Actualizando testigo
-        m = ceil((li + 1 + ls) / 2.0);
+        m = ceil(((li + 1) + ls) / 2.0);
 
         if(auxiliar[m] != 1){
             celdas_consultadas ++;
@@ -60,30 +60,32 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
     }
 
     // Si codigo de envio es igual a el codigo de envio de arreglo(m)
-    if (strcmp(lista->arreglo[m].codigo_envio,codigo_envio) == 0) {
+    if (lista->limite_superior != -1){
+        if (strcmp(lista->arreglo[m].codigo_envio,codigo_envio) == 0) {
 
-        // Pasa ubicacion por parametro
-        *contador = m;
-        salida = LOCALIZACION_EXITOSA;
-
-        // costos de exito de localizacion
-        (costos->Localizacion_exitosa.cantidad)++;
-        costos->Localizacion_exitosa.sumatoria_vector += celdas_consultadas;
-        if (costos->Localizacion_exitosa.maximo < celdas_consultadas) costos->Localizacion_exitosa.maximo = celdas_consultadas;
-
-    }else{
-
-        // Si el codigo de envio es menor al codigo de arreglo(m)
-        if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0)
+            // Pasa ubicacion por parametro
             *contador = m;
-        else
-            *contador = m + 1;
+            salida = LOCALIZACION_EXITOSA;
 
-        // costos de fracaso de localizacion
-        (costos->Localizacion_fallida.cantidad)++;
-        costos->Localizacion_fallida.sumatoria_vector += celdas_consultadas;
-        if (costos->Localizacion_fallida.maximo < celdas_consultadas) costos->Localizacion_fallida.maximo = celdas_consultadas;
-    }
+            // costos de exito de localizacion
+            (costos->Localizacion_exitosa.cantidad)++;
+            costos->Localizacion_exitosa.sumatoria_vector += celdas_consultadas;
+            if (costos->Localizacion_exitosa.maximo < celdas_consultadas) costos->Localizacion_exitosa.maximo = celdas_consultadas;
+
+        }else{
+
+            // Si el codigo de envio es menor al codigo de arreglo(m)
+            if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0)
+                *contador = m;
+            else
+                *contador = m + 1;
+
+            // costos de fracaso de localizacion
+            (costos->Localizacion_fallida.cantidad)++;
+            costos->Localizacion_fallida.sumatoria_vector += celdas_consultadas;
+            if (costos->Localizacion_fallida.maximo < celdas_consultadas) costos->Localizacion_fallida.maximo = celdas_consultadas;
+        }
+    }else *contador = 0;
 
     return salida;
 }
