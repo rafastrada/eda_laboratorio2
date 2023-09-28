@@ -3,6 +3,7 @@
 
 
 #include "Envio.h"
+#include "Costos.h"
 
 // Constantes
 #define LISTA_TAM_ARREGLO 300
@@ -21,18 +22,13 @@ typedef struct {
 void LSO_init(ListaSO *);
 
 // --- LOCALIZAR
-int LSO_localizar(ListaSO *,char [], int *);
+int LSO_localizar(ListaSO *,char [], int *, Costos_estructura *);
 
 // --- ALTA
-int LSO_alta(ListaSO *,Envio);
+int LSO_alta(ListaSO *,Envio *, Costos_estructura *);
 
 // --- BAJA
-int LSO_baja(ListaSO *,char [],int (*)(Envio));
+int LSO_baja(ListaSO *,char [], Costos_estructura *);
 
-// --- MODIFICAR
-int LSO_modificacion(ListaSO *,char [], int (*)(Envio *));
-
-// --- CONSULTA
-int LSO_consulta(ListaSO *, char [],Envio *);
 
 #endif // LISTASO_H

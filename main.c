@@ -7,10 +7,9 @@
 // --- CADENAS GLOBALES
 #define PANTALLA_BARRA "-----------------------------------------------------------------------\n"
 #define PANTALLA_PRINCIPAL_OPERACIONES "\
-1. Cargar Envios desde el archivo \"Envios.txt\"\n\
-2. Comparacion de Estructuras\n\
-3. Mostrar Estructura\n\
-6. Salir del programa\n"
+1. Comparacion de Estructuras\n\
+2. Mostrar Estructura\n\
+3. Salir del programa\n"
 
 
 // --- DEFINICION DE MACROS
@@ -183,32 +182,7 @@ int main()
                            PANTALLA_BARRA
                            "Ingrese el CODIGO del ENVIO que desea consultar >>\t");
 
-                    // Captura de codigo ingresado por usuario
-                    do {
-                        fflush(stdin); scanf("%s",codigo_envio);
-                        strcpy(codigo_envio,strupr(codigo_envio)); // pasa a mayusculas
 
-
-                        // Control de Codigo de envio correcto
-                        entrada_correcta = Envio_esCorrecto_codigo(codigo_envio);
-                        if (!entrada_correcta)
-                            printf("Debe ingresar un CODIGO valido! (7 caracteres alfanumericos) >> ");
-
-                    } while (!entrada_correcta);
-
-
-                    // Proceso de consulta a la LISTA
-                    resultado_consulta = Lista_consulta(&lista_envios,codigo_envio,&envio_consultado);
-                    // CASO existe el elemento buscado
-                    if (resultado_consulta == CONSULTA_EXITOSA) {
-                        printf("\nEnvio encontrado! Se imprime a continuacion...\n\n");
-                        imprimirEnvio(envio_consultado);
-                        printf("\nDesea realizar otra busqueda? [S/N] >> ");
-                    }
-                    // CASO NO existe el elemento
-                    else printf("\n\nNo existe un Envio registrado con el Codigo %s!\n"
-                               "Desea probar con un Codigo de Envio diferente? [S/N] >> ",
-                               codigo_envio);
 
                     //Captura de respuesta de usuario
                     fflush(stdin); seleccion_usuario_menu_buscar = getchar();
@@ -224,123 +198,7 @@ int main()
                 char seleccion_usuario_menu_alta;
                 int entrada_correcta;     // para controles
                 do {
-                    // Variables para crear ENVIO
-                    char codigo_envio[ENVIO_TAM_CODIGO_DE_ENVIO];
-                    unsigned int dni_receptor, dni_remitente;
-                    char nombre_apellido_receptor[ENVIO_TAM_NOMBRE_APELLIDO],
-                    domicilio_receptor[ENVIO_TAM_DOMICILIO],
-                    nombre_apellido_remitente[ENVIO_TAM_NOMBRE_APELLIDO],
-                    fecha_envio[ENVIO_TAM_FECHA],
-                    fecha_recepcion[ENVIO_TAM_FECHA];
 
-                    Envio nuevo_envio; Envio_init(&nuevo_envio);    // variable temporal
-
-                    system("cls");  // limpia la pantalla
-
-                    // Se captura codigo de envio
-                    printf(
-                           "%sAgregar un nuevo Envio\n%s\n"
-                           "Ingrese el CODIGO DE ENVIO >>\t\t",
-                           PANTALLA_BARRA,PANTALLA_BARRA);
-                    do {
-                        fflush(stdin); scanf("%s",codigo_envio);
-                        strcpy(codigo_envio,strupr(codigo_envio));
-                        // Control
-                        entrada_correcta = Envio_esCorrecto_codigo(codigo_envio);
-                        if (!entrada_correcta)
-                            printf("Debe ingresar un CODIGO valido! (7 caracteres alfanumericos) >> ");
-                    } while (!entrada_correcta);
-
-                    // captura - dni de receptor
-                    printf("\nIngrese el DNI del RECEPTOR >>\t\t");
-                    do {
-                        fflush(stdin); scanf("%u",&dni_receptor);
-                        //control
-                        entrada_correcta = Envio_esCorrecto_dni(dni_receptor);
-                        if (!entrada_correcta)
-                            printf("Debe ingresar un DNI valido! >> ");
-                    } while (!entrada_correcta);
-
-                    // captura - nombre y apellido de receptor
-                    printf("\nIngrese el NOMBRE Y APELLIDO del RECEPTOR >>\t");
-                    fflush(stdin); scanf("%[^\n]s",nombre_apellido_receptor);
-                    strcpy(nombre_apellido_receptor,strupr(nombre_apellido_receptor));
-
-                    // captura - domicilio de receptor
-                    printf("\nIngrese el DOMICILIO del RECEPTOR >>\t\t");
-                    fflush(stdin); scanf("%[^\n]s",domicilio_receptor);
-                    strcpy(domicilio_receptor,strupr(domicilio_receptor));
-
-                    // captura - dni de remitente
-                    printf("\nIngrese el DNI del REMITENTE >>\t\t");
-                    do {
-                        fflush(stdin); scanf("%u",&dni_remitente);
-                        //control
-                        entrada_correcta = Envio_esCorrecto_dni(dni_remitente);
-                        if (!entrada_correcta)
-                            printf("Debe ingresar un DNI valido! >> ");
-                    } while (!entrada_correcta);
-
-
-                    // captura - nombre y apellido de remitente
-                    printf("\nIngrese el NOMBRE Y APELLIDO del REMITENTE >>\t");
-                    fflush(stdin); scanf("%[^\n]s",nombre_apellido_remitente);
-                    strcpy(nombre_apellido_remitente,strupr(nombre_apellido_remitente));
-
-                    // captura - fecha envio
-                    printf("\nIngrese la FECHA de ENVIO >>\t\t");
-                    do {
-                        fflush(stdin); scanf("%s",fecha_envio);
-                        //control
-                        entrada_correcta = Envio_esCorrecto_fecha(fecha_envio);
-                        if (!entrada_correcta)
-                            printf("Debe ingresar un formato de FECHA valida! (AAAA-MM-DD) >> ");
-                    } while (!entrada_correcta);
-
-                    // captura - fecha recepcion
-                    printf("\nIngrese la FECHA de RECEPCION >>\t\t");
-                    do {
-                        fflush(stdin); scanf("%s",fecha_recepcion);
-                        //control
-                        entrada_correcta = Envio_esCorrecto_fecha(fecha_recepcion);
-                        if (!entrada_correcta)
-                            printf("Debe ingresar un formato de FECHA valida! (AAAA-MM-DD) >> ");
-                    } while (!entrada_correcta);
-
-                    // Se crea la variable temporal
-                    strcpy(nuevo_envio.codigo_envio,codigo_envio);
-                    nuevo_envio.dni_receptor = dni_receptor;
-                    strcpy(nuevo_envio.nombre_apellido_receptor,nombre_apellido_receptor);
-                    strcpy(nuevo_envio.domicilio_receptor,domicilio_receptor);
-                    nuevo_envio.dni_remitente = dni_remitente;
-                    strcpy(nuevo_envio.nombre_apellido_remitente,nombre_apellido_remitente);
-                    strcpy(nuevo_envio.fecha_envio,fecha_envio);
-                    strcpy(nuevo_envio.fecha_recepcion,fecha_recepcion);
-
-                    // @todo: FALTAN CONTROLES
-                    // @fixme : nombres y domicilio se guardan en blanco
-
-
-                    // Se realiza la operacion de ALTA
-                    int resultado_alta = Lista_alta(&lista_envios,nuevo_envio);
-
-                    // @todo : permitir confirmar el alta
-
-                    // CASO de ALTA exitosa
-                    if (resultado_alta == ALTA_EXITOSA) printf("\n\nEl nuevo ENVIO se guardo correctamente!\n"
-                                                               "Desea agregar un nuevo ENVIO mas?\n[S/N] >> ");
-                    else {
-                        // CASO de CODIGO DE ENVIO ya existente
-                        if (resultado_alta == ALTA_ERROR_CODIGO_EXISTENTE)
-                            printf("\n\nEl CODIGO de ENVIO \"%s\" ya existe! No se puede guardar el ENVIO ingresado.\n"
-                                   "Desea intentar de nuevo con un CODIGO de ENVIO diferente?\n[S/N] >> ",
-                                   codigo_envio);
-                        else {
-                            printf("\n\nNo se pudo guardar el ENVIO, la memoria esta LLENA!\n\n");
-                            system("pause");
-                            break;  // se termina el bucle y se vuelve al menu principal
-                        }
-                    }
 
                     // Captura de respuesta del usuario
                     fflush(stdin); seleccion_usuario_menu_alta = getchar();
@@ -372,57 +230,6 @@ int main()
             system("pause"); break;
             }
 
-            // Dar de Baja un ENVIO
-            case '3': {
-                    // variable de seleccion de usuario
-                    char seleccion_usuario_menu_baja, codigo_envio[ENVIO_TAM_CODIGO_DE_ENVIO];
-                    int entrada_correcta;
-                    do {
-                        // Imprime pantalla
-                        system("cls");
-                        printf(PANTALLA_BARRA
-                               "Eliminar un ENVIO\n"
-                               PANTALLA_BARRA
-                               "Ingrese el CODIGO del ENVIO que desea eliminar >>\t");
-
-                        // Captura de codigo ingresado por usuario
-                        do {
-                            fflush(stdin); scanf("%s",codigo_envio);
-                            strcpy(codigo_envio,strupr(codigo_envio)); // pasa a mayusculas
-
-
-                            // Control de Codigo de envio correcto
-                            entrada_correcta = Envio_esCorrecto_codigo(codigo_envio);
-                            if (!entrada_correcta)
-                                printf("Debe ingresar un CODIGO valido! (7 caracteres alfanumericos) >> ");
-
-                        } while (!entrada_correcta);
-
-                        // Procedimiento de baja
-                        int resultado_baja = Lista_baja(&lista_envios,codigo_envio,confirmacionBaja);
-
-                        // Si se cancelo la baja, interrumpe directamente y vuelve al menu
-                        if (resultado_baja == BAJA_CANCELADA) break;
-
-                        // Caso exitoso
-                        else if (resultado_baja == BAJA_EXITOSA) {
-                            printf("\n\nEl ENVIO %s se elimino correctamente!\n"
-                                   "Desea eliminar otro envio? [S/N] >> ",codigo_envio);
-                        } else if (resultado_baja == BAJA_ERROR_NO_EXISTE) {// Caso que el ENVIO no exista
-                            printf("\n\nError! El ENVIO %s no existe!\n"
-                                   "Desea probar con un CODIGO diferente? [S/N] >> ",codigo_envio);
-                        }
-
-                    // Captura de respuesta del usuario
-                    fflush(stdin); seleccion_usuario_menu_baja = getchar();
-                    while (entradaDistintaSino(seleccion_usuario_menu_baja)) {
-                        printf("\nDebe ingresar una entrada valida!\n[S/N] >> ");
-                        fflush(stdin); seleccion_usuario_menu_baja = getchar();
-                    }
-
-                    } while (seleccion_usuario_menu_baja == 's'); break; // sale del switch
-            }
-
             case '5':{
             system("cls");
             printf(
@@ -433,7 +240,7 @@ int main()
             }
         }
 
-    } while (seleccion_usuario_menu_principal != '6');
+    } while (seleccion_usuario_menu_principal != '3');
 
 
     return 0;
