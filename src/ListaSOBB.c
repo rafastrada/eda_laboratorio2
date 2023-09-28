@@ -4,26 +4,29 @@
 
 void LSOBB_init(ListaSOBB *lista) {
 
-    strcpy(lista->arreglo[0].codigo_envio,"0");
     lista->limite_superior = -1;
 }
 
 /*Para la lista con busqueda binaria (LSOBB) la consigna a utilizar sera biseccion, lımite inferior exclusivo, lımite
 superior inclusivo, testigo y segmento mas grande a la derecha.*/
 
-int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *costos) {
+int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, *costos) {
     // Busca en 'lista' el elemento con el campo 'codigo_envio',
     // si lo encuentra, la funcion devuelve el indice del arreglo,
     // si el elemento no se encuentra en la lista, devuelve la posicion donde deberia encontrarse.
 
     // Para calculos de costos
-    int celdas_consultadas, i, aux;
+    int celdas_consultadas[lista->limite_superior], i, aux;
+
+    for(i = 0; lista->limite_superior; i++){
+        celdas_consultadas[i] = 0;
+    }
 
     // Limite inferior exclusivo
     int li = -1;
 
     // Limite superior inclusivo
-    int ls = lista->limite_superior + 1;
+    int ls = lista->limite_superior;
 
     // Testigo: (limite inferior + 1), limite superior
     int m = ceil((li + 1 + ls) / 2.0);
@@ -42,10 +45,10 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *c
 
         //Actualizando testigo
         m = ceil((li + 1 + ls) / 2.0);
-        celdas_consultadas ++;
+        celdas_consultadas[m] = 1;
     }
 
-    celdas_consultadas ++;
+    celdas_consultadas[m] = 1;
     *costos = celdas_consultadas;
 
     // Si codigo de envio es igual a el codigo de envio de arreglo(i)
@@ -67,7 +70,7 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *c
 }
 
 
-int LSOBB_alta(ListaSOBB *lista, Envio nuevo) {
+int LSOBB_alta(ListaSOBB *lista, Envio *nuevo, Costos_estructura *costos) {
 
     // Variable de retorno
     int salida = ALTA_ERROR_LISTA_LLENA;
@@ -76,7 +79,7 @@ int LSOBB_alta(ListaSOBB *lista, Envio nuevo) {
 
     // Comprueba si existe un ENVIO con CODIGO DE ENVIO similar
     // y obtiene la posicion en donde deberia ir el elemento
-    int exito_localizar = LSO_localizar(lista,nuevo.codigo_envio,&posicion_nuevo,);
+    int exito_localizar = LSO_localizar(lista,nuevo->codigo_envio,&posicion_nuevo,);
 
     // Se procesa el ALTA
     if (exito_localizar == LOCALIZACION_ERROR_NO_EXISTE) {
@@ -103,85 +106,32 @@ int LSOBB_alta(ListaSOBB *lista, Envio nuevo) {
 }
 
 
-int LSOBB_baja(ListaSOBB *lista,char codigo_envio[], int (*manejo_confirmacion)(Envio)) {
+int LSOBB_baja(ListaSOBB *lista,Envio *elemento, Costos_estructura *costos) {
 
     int posicion, salida = BAJA_ERROR_NO_EXISTE;
-    int exito_localizar;
+    int exito_localizar, celdas_desplazadas;
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
-    exito_localizar = LSO_localizar(lista,codigo_envio,&posicion);
+    exito_localizar = LSOBB_localizar(lista,codigo_envio,&posicion);
 
-    if (exito_localizar == LOCALIZACION_EXITOSA) {
-        int confirmacion = 1;
+    if (exito_localizar == LOCALIZACION_EXITOSA){
 
-        // 'manejo_confirmacion' es un puntero a una funcion que devuelve
-        // si se confirma la baja o no
-        if (manejo_confirmacion != NULL) confirmacion = manejo_confirmacion((lista->arreglo[posicion]));
-
-        // Permite cancelar la baja por medio de la funcion 'manejo_confirmacion'
-        if (confirmacion) {
-            for (int i=posicion; i<lista->limite_superior; i++) {
+        if(Envio_sonIguales(elemento, lista->arreglo[posicion])){
+            for (int i= posicion; i<lista->limite_superior; i++){
                 lista->arreglo[i] = lista->arreglo[i+1];
+                celdas_desplazadas++;
             }
-
             // Reduce el limite superior en UNO
             lista->limite_superior--;
+
             // Actualiza el valor de salida
             salida = BAJA_EXITOSA;
-        }
-        else salida = BAJA_CANCELADA;
-    }
-
-    return salida;
-}
-
-int LSOBB_modificacion(ListaSOBB *lista,char codigo_envio[],int (*manejo_remplazo)(Envio *)) {
-
-    int posicion, exito_localizar, salida = MODIFICACION_CANCELADA; // salida por defecto
-
-    // Se busca el 'codigo_envio' en la lista
-    exito_localizar = LSO_localizar(lista,codigo_envio,&posicion);
-
-    // Si existe el elemento, se procesa la modificacion
-    if (exito_localizar == LOCALIZACION_EXITOSA) {
-        // Variable para confirmar la modificacion del elemento
-        // (por defecto NO se lleva a cabo la modificacion)
-        int confirmacion = 0;
-        // Objeto ENVIO temporal intermedio para modificar sus campos
-        Envio temporal = lista->arreglo[posicion];
-
-        // 'manejo_remplazo' es puntero a una funcion que modificara los campos de 'temporal'
-        // para posteriormente aplicarlos en la lista. Su retorno sirve para confirmar o
-        // cancelar la modificacion.
-        // NOTA: LA FUNCION NO DEBE MODIFICAR EL CODIGO DE ENVIO
-        if (manejo_remplazo != NULL) confirmacion = manejo_remplazo(&temporal);
-
-        // Se guardan los cambios en caso de confirmacion
-        if (confirmacion) {
-                lista->arreglo[posicion] = temporal;
-                //Se actualiza la salida
-                salida = MODIFICACION_EXITOSA;
+            (costos->Baja.cantidad)++;
+            costos->Baja.sumatoria_vector += celdas_consultadas;
+            if (costos->Baja.maximo < celdas_consultadas) costos->Baja.maximo = celdas_consultadas;
         }
     }
-    else salida = MODIFICACION_ERROR_NO_EXISTE;
-
     return salida;
 }
 
-int LSOBB_consulta(ListaSOBB *lista, char codigo_envio[], Envio *consultado) {
-    int posicion, exito_localizar, salida = CONSULTA_ERROR_NO_EXISTE;
-
-    // Se busca el elemento en la lista, y se captura su posicion
-    exito_localizar = LSO_localizar(lista,codigo_envio,&posicion);
-
-    // Si el elemento existe, se procesa.
-    // Caso contrario la funcion continua y retorna 'CONSULTA_ERROR_NO_EXISTE'
-    if (exito_localizar == LOCALIZACION_EXITOSA) {
-        // Se devuelve por puntero el elemento buscado
-        *consultado = lista->arreglo[posicion];
-        // Se actualiza la salida de la funcion
-        salida = CONSULTA_EXITOSA;
-    }
-    return salida;
-}

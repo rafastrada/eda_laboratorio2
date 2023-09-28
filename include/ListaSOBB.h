@@ -33,6 +33,6 @@ int LSOBB_baja(ListaSOBB *,char [],int (*)(Envio),Costos_estructura *);
 int LSOBB_modificacion(ListaSOBB *,char [], int (*)(Envio *));
 
 // --- CONSULTA
-int LSOBB_consulta(ListaSOBB *, char [],Envio *,Costos_estructura *);
+int LSOBB_consulta(ListaSOBB *, char [],Envio *);
 
 #endif // LISTASOBB_H
