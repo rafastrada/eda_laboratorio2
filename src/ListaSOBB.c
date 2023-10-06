@@ -17,7 +17,7 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
 
     int salida = LOCALIZACION_ERROR_NO_EXISTE;
     // Para calculos de costos
-    int auxiliar[LISTASOBB_TAM_ARREGLO], i, celdas_consultadas;
+    int auxiliar[LISTASOBB_TAM_ARREGLO], i, celdas_consultadas = 0;
 
     for(i = 0; i <= lista->limite_superior; i++){
         auxiliar[i] = 0;
