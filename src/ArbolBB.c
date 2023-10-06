@@ -88,8 +88,8 @@ int ABB_alta(ArbolBB *arbol, Envio *nuevo, Costos_estructura *costos) {
 
             // costo de alta exitosa
             (costos->Alta.cantidad)++;
-            costos->Alta.sumatoria_vector += 1.5;   // 0.5 por el puntero actualizado + 1.0 por la copia de los datos
-            if (costos->Alta.maximo < 1.5) costos->Alta.maximo = 1.5;   // operacion redundante despues de la primera alta
+            costos->Alta.sumatoria_vector += 0.5;   // 0.5 por el puntero actualizado
+            if (costos->Alta.maximo < 0.5) costos->Alta.maximo = 0.5;   // operacion redundante despues de la primera alta
             // @todo : quitar 'if' redundante de operacion de alta?
         }
         // caso que no haya memoria disponible
