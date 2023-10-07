@@ -68,9 +68,9 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
             salida = LOCALIZACION_EXITOSA;
 
             // costos de exito de localizacion
-            (costos->Localizacion_exitosa.cantidad)++;
-            costos->Localizacion_exitosa.sumatoria_vector += celdas_consultadas;
-            if (costos->Localizacion_exitosa.maximo < celdas_consultadas) costos->Localizacion_exitosa.maximo = celdas_consultadas;
+            (costos->Evocacion_exitosa.cantidad)++;
+            costos->Evocacion_exitosa.sumatoria_vector += celdas_consultadas;
+            if (costos->Evocacion_exitosa.maximo < celdas_consultadas) costos->Evocacion_exitosa.maximo = celdas_consultadas;
 
         }else{
 
@@ -81,9 +81,9 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
                 *contador = m + 1;
 
             // costos de fracaso de localizacion
-            (costos->Localizacion_fallida.cantidad)++;
-            costos->Localizacion_fallida.sumatoria_vector += celdas_consultadas;
-            if (costos->Localizacion_fallida.maximo < celdas_consultadas) costos->Localizacion_fallida.maximo = celdas_consultadas;
+            (costos->Evocacion_fallida.cantidad)++;
+            costos->Evocacion_fallida.sumatoria_vector += celdas_consultadas;
+            if (costos->Evocacion_fallida.maximo < celdas_consultadas) costos->Evocacion_fallida.maximo = celdas_consultadas;
         }
     }else *contador = 0;
 

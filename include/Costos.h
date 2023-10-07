@@ -9,8 +9,8 @@ struct vector_costos {
 };
 
 typedef struct {
-    struct vector_costos Localizacion_exitosa;
-    struct vector_costos Localizacion_fallida;
+    struct vector_costos Evocacion_exitosa;
+    struct vector_costos Evocacion_fallida;
     struct vector_costos Alta;
     struct vector_costos Baja;
 } Costos_estructura;

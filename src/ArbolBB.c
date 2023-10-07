@@ -16,7 +16,7 @@ void ABB_initHoja(ABB_Hoja *hoja) {
     hoja->mayores = NULL;
 }
 
-int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB_Hoja ***ubicacion_puntero_padre, Costos_estructura *costos) {
+int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB_Hoja ***ubicacion_puntero_padre, int *costo) {
     /*
         La funcion devuelve por el parametro 'ubicacion' la direccion del nodo del elemento buscado
         (el nodo con el elemento o el nodo externo donde deberia encontrarse).
@@ -46,32 +46,19 @@ int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB
     }
 
     celdas_consultadas++;   // se añade la consulta a la celda que cierra el bucle anterior
+    *costo = celdas_consultadas;    // se devuelve la cantidad de celdas consultadas por parametro
 
     // si no se apunta un nodo externo (null), entonces se encontro el elemento
-    if (*ubicacion != NULL) {
-        // se refleja el costo de la localizacion exitosa
-        (costos->Localizacion_exitosa.cantidad)++;
-        costos->Localizacion_exitosa.sumatoria_vector += celdas_consultadas;
-        if (costos->Localizacion_exitosa.maximo < celdas_consultadas) costos->Localizacion_exitosa.maximo = celdas_consultadas;
-
-        return LOCALIZACION_EXITOSA;
-    }
-    else {
-        // se refleja el costo del fracaso de la localizacion
-        (costos->Localizacion_fallida.cantidad)++;
-        costos->Localizacion_fallida.sumatoria_vector += celdas_consultadas;
-        if (costos->Localizacion_fallida.maximo < celdas_consultadas) costos->Localizacion_fallida.maximo = celdas_consultadas;
-
-        return LOCALIZACION_ERROR_NO_EXISTE;
-    }
+    if (*ubicacion != NULL) return LOCALIZACION_EXITOSA;
+    else return LOCALIZACION_ERROR_NO_EXISTE;
 }
 
 int ABB_alta(ArbolBB *arbol, Envio *nuevo, Costos_estructura *costos) {
     ABB_Hoja *ubicacion, **ubicacion_puntero_padre;
-    int salida;
+    int salida, celdas_consultadas;     // la variable 'celdas_consultadas' esta para cumplir con los parametros requeridos de localizar
 
     // si el nuevo elemento no se encuentra en el arbol, se procede a agregarlo
-    if (ABB_localizar(arbol,nuevo->codigo_envio,&ubicacion,&ubicacion_puntero_padre,costos) == LOCALIZACION_ERROR_NO_EXISTE) {
+    if (ABB_localizar(arbol,nuevo->codigo_envio,&ubicacion,&ubicacion_puntero_padre,&celdas_consultadas) == LOCALIZACION_ERROR_NO_EXISTE) {
         // Como la localizacion no encontro el elemento, 'ubicacion' vale NULL, por lo que utilizamos el
         // puntero del padre que apuntaba la ubicacion que le corresponde a dicho elemento
 
@@ -103,10 +90,10 @@ int ABB_alta(ArbolBB *arbol, Envio *nuevo, Costos_estructura *costos) {
 
 int ABB_baja(ArbolBB *arbol, Envio *elemento, Costos_estructura *costos) {
     ABB_Hoja *ubicacion, **ubicacion_puntero_padre;
-    int salida;
+    int salida, celdas_consultadas; // 'celdas_consultadas' esta para cumplir con los parametros requeridos por localizar
 
     // Caso: si el elemento se encuentra en el arbol
-    if (ABB_localizar(arbol,elemento->codigo_envio,&ubicacion,&ubicacion_puntero_padre,costos) == LOCALIZACION_EXITOSA) {
+    if (ABB_localizar(arbol,elemento->codigo_envio,&ubicacion,&ubicacion_puntero_padre,&celdas_consultadas) == LOCALIZACION_EXITOSA) {
         // si el envio es igual campo por campo
         if (Envio_sonIguales(elemento,&(ubicacion->envio))) {
             // Caso: el nodo a eliminar tiene 2 hijos
@@ -220,5 +207,29 @@ void ABB_liberarMemoria(ArbolBB *arbol) {
 
             free(cursor_hoja);
         }
+    }
+}
+
+int ABB_evocar(ArbolBB *arbol, char codigo_envio[], Costos_estructura *costos) {
+    // variables para cumplir con los parametros requeridos por el 'localizar'
+    ABB_Hoja *puntero, **puntero_padre;
+    int celdas_consultadas;
+
+    if (ABB_localizar(arbol,codigo_envio,&puntero,&puntero_padre,&celdas_consultadas) == LOCALIZACION_EXITOSA) {
+
+        // reflejo de costo de evocacion exitosa
+        (costos->Evocacion_exitosa.cantidad)++;
+        costos->Evocacion_exitosa.sumatoria_vector += (float)celdas_consultadas;
+        if ((costos->Evocacion_exitosa.maximo) < (float)celdas_consultadas) costos->Evocacion_exitosa.maximo = (float) celdas_consultadas;
+
+        return EVOCAR_EXITOSO;
+    }
+    else {
+        // reflejo de costo de evocacion exitosa
+        (costos->Evocacion_fallida.cantidad)++;
+        costos->Evocacion_fallida.sumatoria_vector += (float)celdas_consultadas;
+        if ((costos->Evocacion_fallida.maximo) < (float)celdas_consultadas) costos->Evocacion_fallida.maximo = (float) celdas_consultadas;
+
+        return EVOCAR_NO_EXISTE;
     }
 }

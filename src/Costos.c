@@ -3,15 +3,15 @@
 
 void Costos_estructura_init(Costos_estructura *costos) {
     // inicia los valores en cero
-    costos->Localizacion_exitosa.cantidad = 0;
-    costos->Localizacion_exitosa.sumatoria_vector = 0;
-    costos->Localizacion_exitosa.maximo = 0;
-    costos->Localizacion_exitosa.media = 0;
+    costos->Evocacion_exitosa.cantidad = 0;
+    costos->Evocacion_exitosa.sumatoria_vector = 0;
+    costos->Evocacion_exitosa.maximo = 0;
+    costos->Evocacion_exitosa.media = 0;
 
-    costos->Localizacion_fallida.cantidad = 0;
-    costos->Localizacion_fallida.sumatoria_vector = 0;
-    costos->Localizacion_fallida.maximo = 0;
-    costos->Localizacion_fallida.media = 0;
+    costos->Evocacion_fallida.cantidad = 0;
+    costos->Evocacion_fallida.sumatoria_vector = 0;
+    costos->Evocacion_fallida.maximo = 0;
+    costos->Evocacion_fallida.media = 0;
 
     costos->Alta.cantidad = 0;
     costos->Alta.sumatoria_vector = 0;
@@ -25,13 +25,13 @@ void Costos_estructura_init(Costos_estructura *costos) {
 };
 
 void Costos_estructura_calculoMedias(Costos_estructura *costos) {
-    costos->Localizacion_exitosa.media =
-    costos->Localizacion_exitosa.sumatoria_vector /
-    ((float)costos->Localizacion_exitosa.cantidad);
+    costos->Evocacion_exitosa.media =
+    costos->Evocacion_exitosa.sumatoria_vector /
+    ((float)costos->Evocacion_exitosa.cantidad);
 
-    costos->Localizacion_fallida.media =
-    costos->Localizacion_fallida.sumatoria_vector /
-    ((float)costos->Localizacion_fallida.cantidad);
+    costos->Evocacion_fallida.media =
+    costos->Evocacion_fallida.sumatoria_vector /
+    ((float)costos->Evocacion_fallida.cantidad);
 
     costos->Alta.media =
     costos->Alta.sumatoria_vector /

@@ -25,13 +25,16 @@ void ABB_initArbol(ArbolBB *);
 void ABB_initHoja(ABB_Hoja *);
 
 // Localizar
-int ABB_localizar(ArbolBB *,char [], ABB_Hoja **, ABB_Hoja ***, Costos_estructura *);
+int ABB_localizar(ArbolBB *,char [], ABB_Hoja **, ABB_Hoja ***, int *);
 
 // ALTA
 int ABB_alta(ArbolBB *,Envio *, Costos_estructura *);
 
 // Baja
 int ABB_baja(ArbolBB *,Envio *, Costos_estructura *);
+
+// Evocar
+int ABB_evocar(ArbolBB *,char [], Costos_estructura *);
 
 // Barrido preorden
 int ABB_mostrarArbol_preorden(ArbolBB *);

@@ -25,26 +25,26 @@ int LSO_localizar(ListaSO *lista,char codigo_envio[], int *contador, Costos_estr
         // Si 'codigo_envio' es distinto del de Lista(contador), no se encontro el elemento
         if (strcmp(lista->arreglo[*contador].codigo_envio,codigo_envio) == 0) {
             // costos de localizacion exitosa
-            (costos->Localizacion_exitosa.cantidad)++;
-            costos->Localizacion_exitosa.sumatoria_vector += *contador + 1; // se incluye la consulta que sale del bucle
-            if (*contador + 1 > costos->Localizacion_exitosa.maximo) costos->Localizacion_exitosa.maximo = *contador +1;
+            (costos->Evocacion_exitosa.cantidad)++;
+            costos->Evocacion_exitosa.sumatoria_vector += *contador + 1; // se incluye la consulta que sale del bucle
+            if (*contador + 1 > costos->Evocacion_exitosa.maximo) costos->Evocacion_exitosa.maximo = *contador +1;
 
             return LOCALIZACION_EXITOSA;
         }
         else {
             // costos de fracaso de localizacion
-            (costos->Localizacion_fallida.cantidad)++;
-            costos->Localizacion_fallida.sumatoria_vector += *contador + 1;
-            if (costos->Localizacion_fallida.maximo < *contador + 1) costos->Localizacion_fallida.maximo = *contador +1;
+            (costos->Evocacion_fallida.cantidad)++;
+            costos->Evocacion_fallida.sumatoria_vector += *contador + 1;
+            if (costos->Evocacion_fallida.maximo < *contador + 1) costos->Evocacion_fallida.maximo = *contador +1;
 
             return LOCALIZACION_ERROR_NO_EXISTE;
         }
     }
     else {
         // costo de fracaso de localizacion
-        (costos->Localizacion_fallida.cantidad)++;
-        costos->Localizacion_fallida.sumatoria_vector += *contador + 1;
-        if (costos->Localizacion_fallida.maximo < *contador + 1) costos->Localizacion_fallida.maximo = *contador + 1;
+        (costos->Evocacion_fallida.cantidad)++;
+        costos->Evocacion_fallida.sumatoria_vector += *contador + 1;
+        if (costos->Evocacion_fallida.maximo < *contador + 1) costos->Evocacion_fallida.maximo = *contador + 1;
 
         return LOCALIZACION_ERROR_NO_EXISTE;
     }
