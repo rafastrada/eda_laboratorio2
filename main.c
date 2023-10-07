@@ -73,7 +73,6 @@ int Lectura_Operaciones(ListaSO *lso, ListaSOBB *lsobb, ArbolBB *abb,
                         Costos_estructura *lso_costos,
                         Costos_estructura *lsobb_costos,
                         Costos_estructura *abb_costos,
-                        Costos_estructura *lso_costos_loc,
                         Costos_estructura *lsobb_costos_loc
                         ) {
     FILE *fichero;
@@ -122,7 +121,7 @@ int Lectura_Operaciones(ListaSO *lso, ListaSOBB *lsobb, ArbolBB *abb,
                 }
             } else if (operacion == CODOP_EVOCAR) {
                 // @fixme : cambiar localizar por evocar, borrar auxiliar
-                LSO_localizar(lso,nuevo_envio.codigo_envio,&auxiliar, lso_costos_loc);
+                LSO_evocar(lso,nuevo_envio.codigo_envio,lso_costos);
                 LSOBB_localizar(lsobb, nuevo_envio.codigo_envio, &auxiliar, lsobb_costos_loc);
                 ABB_evocar(abb,nuevo_envio.codigo_envio, abb_costos);
             }
@@ -144,9 +143,9 @@ int main()
 
     // Costos de cada estructura
     Costos_estructura envios_lso_costos, envios_lsobb_costos, envios_abb_costos,
-    envios_lso_costos_loc, envios_lsobb_costos_loc;
+    envios_lsobb_costos_loc;
     Costos_estructura_init(&envios_lso_costos); Costos_estructura_init(&envios_lsobb_costos); Costos_estructura_init(&envios_abb_costos);
-    Costos_estructura_init(&envios_lso_costos_loc); Costos_estructura_init(&envios_lsobb_costos_loc);
+    Costos_estructura_init(&envios_lsobb_costos_loc);
 
     int hubo_memorizacion = 0;
 
@@ -175,13 +174,12 @@ int main()
                 if (!hubo_memorizacion) {
                     Lectura_Operaciones(&envios_lso, &envios_lsobb, &envios_abb,
                                         &envios_lso_costos, &envios_lsobb_costos, &envios_abb_costos,
-                                        &envios_lso_costos_loc, &envios_lsobb_costos_loc);
+                                        &envios_lsobb_costos_loc);
 
                     // Calculo de costos medios
                     Costos_estructura_calculoMedias(&envios_lso_costos);
                     Costos_estructura_calculoMedias(&envios_lsobb_costos);
                     Costos_estructura_calculoMedias(&envios_abb_costos);
-                    Costos_estructura_calculoMedias(&envios_lso_costos_loc);
                     Costos_estructura_calculoMedias(&envios_lsobb_costos_loc);
 
                     hubo_memorizacion = 1;
@@ -194,26 +192,26 @@ int main()
                        "\n'N' es el tamaño del vector de costo correspondiente.\n\n"
                        "\t\t| N = %u\t| N = %u\t| N = %u\t| N = %u\t|\n"
                        "\n\t\t|\t Esfuerzo Maximo\t\t\t\t\t|\n"
-                       "\t\t|\t Localizacion\t\t|\t\t|\t\t|\n"
+                       "\t\t|\t Evocacion\t\t|\t\t|\t\t|\n"
                        "\t\t| Exitosa\t| Fracaso\t| Alta Ex\t| Baja Ex\t|\n"
                        "LSO:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
                        "LSOBB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
                        "ABB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
 
                        "\n\t\t|\t Esfuerzo Medio\t\t\t\t\t\t|\n"
-                       "\t\t|\t Localizacion\t\t|\t\t|\t\t|\n"
+                       "\t\t|\t Evocacion\t\t|\t\t|\t\t|\n"
                        "\t\t| Exitosa\t| Fracaso\t| Alta Ex\t| Baja Ex\t|\n"
                        "LSO:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
                        "LSOBB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
                        "ABB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
                        "\n\n",
-                       envios_lso_costos_loc.Evocacion_exitosa.cantidad,
-                       envios_lso_costos_loc.Evocacion_fallida.cantidad,
+                       envios_lso_costos.Evocacion_exitosa.cantidad,
+                       envios_lso_costos.Evocacion_fallida.cantidad,
                        envios_lso_costos.Alta.cantidad,
                        envios_lso_costos.Baja.cantidad,
 
-                       envios_lso_costos_loc.Evocacion_exitosa.maximo,
-                       envios_lso_costos_loc.Evocacion_fallida.maximo,
+                       envios_lso_costos.Evocacion_exitosa.maximo,
+                       envios_lso_costos.Evocacion_fallida.maximo,
                        envios_lso_costos.Alta.maximo,
                        envios_lso_costos.Baja.maximo,
 
@@ -227,8 +225,8 @@ int main()
                        envios_abb_costos.Alta.maximo,
                        envios_abb_costos.Baja.maximo,
 
-                       envios_lso_costos_loc.Evocacion_exitosa.media,
-                       envios_lso_costos_loc.Evocacion_fallida.media,
+                       envios_lso_costos.Evocacion_exitosa.media,
+                       envios_lso_costos.Evocacion_fallida.media,
                        envios_lso_costos.Alta.media,
                        envios_lso_costos.Baja.media,
 

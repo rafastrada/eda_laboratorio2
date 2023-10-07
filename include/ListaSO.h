@@ -22,7 +22,7 @@ typedef struct {
 void LSO_init(ListaSO *);
 
 // --- LOCALIZAR
-int LSO_localizar(ListaSO *,char [], int *, Costos_estructura *);
+int LSO_localizar(ListaSO *,char [], int *, int *);
 
 // --- ALTA
 int LSO_alta(ListaSO *,Envio *, Costos_estructura *);
@@ -31,6 +31,8 @@ int LSO_alta(ListaSO *,Envio *, Costos_estructura *);
 int LSO_baja(ListaSO *,Envio *, Costos_estructura *);
 
 int LSO_mostrarLista(ListaSO *);
+
+int LSO_evocar(ListaSO *, char [], Costos_estructura *);
 
 
 #endif // LISTASO_H
