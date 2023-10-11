@@ -10,7 +10,7 @@ void LSOBB_init(ListaSOBB *lista) {
 /*Para la lista con busqueda binaria (LSOBB) la consigna a utilizar sera biseccion, lımite inferior exclusivo, lımite
 superior inclusivo, testigo y segmento mas grande a la derecha.*/
 
-int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_estructura *costos) {
+int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,int *costos) {
     // Busca en 'lista' el elemento con el campo 'codigo_envio',
     // si lo encuentra, la funcion devuelve el indice del arreglo,
     // si el elemento no se encuentra en la lista, devuelve la posicion donde deberia encontrarse.
@@ -59,6 +59,8 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
         auxiliar[m] = 1;
     }
 
+    *costos = celdas_consultadas;
+
     // Si codigo de envio es igual a el codigo de envio de arreglo(m)
     if (lista->limite_superior != -1){
         if (strcmp(lista->arreglo[m].codigo_envio,codigo_envio) == 0) {
@@ -67,10 +69,10 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
             *contador = m;
             salida = LOCALIZACION_EXITOSA;
 
-            // costos de exito de localizacion
-            (costos->Evocacion_exitosa.cantidad)++;
-            costos->Evocacion_exitosa.sumatoria_vector += celdas_consultadas;
-            if (costos->Evocacion_exitosa.maximo < celdas_consultadas) costos->Evocacion_exitosa.maximo = celdas_consultadas;
+//            // costos de exito de localizacion
+//            (costos->Evocacion_exitosa.cantidad)++;
+//            costos->Evocacion_exitosa.sumatoria_vector += celdas_consultadas;
+//            if (costos->Evocacion_exitosa.maximo < celdas_consultadas) costos->Evocacion_exitosa.maximo = celdas_consultadas;
 
         }else{
 
@@ -80,10 +82,10 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,Costos_
             else
                 *contador = m + 1;
 
-            // costos de fracaso de localizacion
-            (costos->Evocacion_fallida.cantidad)++;
-            costos->Evocacion_fallida.sumatoria_vector += celdas_consultadas;
-            if (costos->Evocacion_fallida.maximo < celdas_consultadas) costos->Evocacion_fallida.maximo = celdas_consultadas;
+//            // costos de fracaso de localizacion
+//            (costos->Evocacion_fallida.cantidad)++;
+//            costos->Evocacion_fallida.sumatoria_vector += celdas_consultadas;
+//            if (costos->Evocacion_fallida.maximo < celdas_consultadas) costos->Evocacion_fallida.maximo = celdas_consultadas;
         }
     }else *contador = 0;
 
@@ -96,11 +98,11 @@ int LSOBB_alta(ListaSOBB *lista, Envio *nuevo, Costos_estructura *costos) {
     // Variable de retorno
     int salida = ALTA_ERROR_LISTA_LLENA;
     // Variable de exito de localizar
-    int posicion_nuevo, celdas_desplazadas = 0;
+    int posicion_nuevo, celdas_desplazadas = 0, costo_localizar = 0;
 
     // Comprueba si existe un ENVIO con CODIGO DE ENVIO similar
     // y obtiene la posicion en donde deberia ir el elemento
-    int exito_localizar = LSOBB_localizar(lista,nuevo->codigo_envio,&posicion_nuevo, costos);
+    int exito_localizar = LSOBB_localizar(lista,nuevo->codigo_envio,&posicion_nuevo, &costo_localizar);
 
     // Se procesa el ALTA
     if (exito_localizar == LOCALIZACION_ERROR_NO_EXISTE) {
@@ -159,6 +161,25 @@ int LSOBB_baja(ListaSOBB *lista,Envio *elemento, Costos_estructura *costos) {
         }
     }
     return salida;
+}
+
+int LSOBB_evocar(ListaSOBB *lista, char codigo_envio[], Costos_estructura *costos) {
+    int celdas_consultadas, posicion;   // 'posicion' esta para cumplir los parametros requeridos por 'localizar'
+
+    if (LSOBB_localizar(lista,codigo_envio,&posicion,&celdas_consultadas) == LOCALIZACION_EXITOSA) {
+        (costos->Evocacion_exitosa).cantidad++;
+        costos->Evocacion_exitosa.sumatoria_vector += (float)celdas_consultadas;
+        if (costos->Evocacion_exitosa.maximo < (float)celdas_consultadas) costos->Evocacion_exitosa.maximo = (float)celdas_consultadas;
+
+        return EVOCAR_EXITOSO;
+    }
+    else {
+        (costos->Evocacion_fallida).cantidad++;
+        costos->Evocacion_fallida.sumatoria_vector += (float)celdas_consultadas;
+        if (costos->Evocacion_fallida.maximo < (float)celdas_consultadas) costos->Evocacion_fallida.maximo = (float)celdas_consultadas;
+
+        return EVOCAR_NO_EXISTE;
+    }
 }
 
 int LSOBB_mostrarLista(ListaSOBB *lista) {

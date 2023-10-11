@@ -21,7 +21,7 @@ typedef struct {
 void LSOBB_init(ListaSOBB *);
 
 // --- LOCALIZAR
-int LSOBB_localizar(ListaSOBB *,char [], int *,Costos_estructura *);
+int LSOBB_localizar(ListaSOBB *,char [], int *,int *);
 
 // --- ALTA
 int LSOBB_alta(ListaSOBB *,Envio *,Costos_estructura *);
@@ -31,5 +31,8 @@ int LSOBB_baja(ListaSOBB *,Envio *,Costos_estructura *);
 
 // --- MOSTRAR LISTA
 int LSOBB_mostrarLista(ListaSOBB *);
+
+// ---EVOCAR
+int LSOBB_evocar(ListaSOBB *, char [], Costos_estructura *);
 
 #endif // LISTASOBB_H

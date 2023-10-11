@@ -122,7 +122,7 @@ int Lectura_Operaciones(ListaSO *lso, ListaSOBB *lsobb, ArbolBB *abb,
             } else if (operacion == CODOP_EVOCAR) {
                 // @fixme : cambiar localizar por evocar, borrar auxiliar
                 LSO_evocar(lso,nuevo_envio.codigo_envio,lso_costos);
-                LSOBB_localizar(lsobb, nuevo_envio.codigo_envio, &auxiliar, lsobb_costos_loc);
+                LSOBB_evocar(lsobb, nuevo_envio.codigo_envio, lsobb_costos);
                 ABB_evocar(abb,nuevo_envio.codigo_envio, abb_costos);
             }
 
@@ -174,7 +174,7 @@ int main()
                 if (!hubo_memorizacion) {
                     Lectura_Operaciones(&envios_lso, &envios_lsobb, &envios_abb,
                                         &envios_lso_costos, &envios_lsobb_costos, &envios_abb_costos,
-                                        &envios_lsobb_costos_loc);
+                                        &envios_lsobb_costos);
 
                     // Calculo de costos medios
                     Costos_estructura_calculoMedias(&envios_lso_costos);
@@ -215,8 +215,8 @@ int main()
                        envios_lso_costos.Alta.maximo,
                        envios_lso_costos.Baja.maximo,
 
-                       envios_lsobb_costos_loc.Evocacion_exitosa.maximo,
-                       envios_lsobb_costos_loc.Evocacion_fallida.maximo,
+                       envios_lsobb_costos.Evocacion_exitosa.maximo,
+                       envios_lsobb_costos.Evocacion_fallida.maximo,
                        envios_lsobb_costos.Alta.maximo,
                        envios_lsobb_costos.Baja.maximo,
 
@@ -230,8 +230,8 @@ int main()
                        envios_lso_costos.Alta.media,
                        envios_lso_costos.Baja.media,
 
-                       envios_lsobb_costos_loc.Evocacion_exitosa.media,
-                       envios_lsobb_costos_loc.Evocacion_fallida.media,
+                       envios_lsobb_costos.Evocacion_exitosa.media,
+                       envios_lsobb_costos.Evocacion_fallida.media,
                        envios_lsobb_costos.Alta.media,
                        envios_lsobb_costos.Baja.media,
 
