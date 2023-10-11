@@ -53,7 +53,6 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *c
         }
     }
 
-    *costos = celdas_consultadas;
 
     // Si codigo de envio es igual a el codigo de envio de arreglo(m)
     if (lista->limite_superior != -1){
@@ -64,11 +63,6 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *c
             *contador = m;
             salida = LOCALIZACION_EXITOSA;
 
-//            // costos de exito de localizacion
-//            (costos->Evocacion_exitosa.cantidad)++;
-//            costos->Evocacion_exitosa.sumatoria_vector += celdas_consultadas;
-//            if (costos->Evocacion_exitosa.maximo < celdas_consultadas) costos->Evocacion_exitosa.maximo = celdas_consultadas;
-
         }else{
 
             // Si el codigo de envio es menor al codigo de arreglo(m)
@@ -76,13 +70,21 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *c
                 *contador = m;
             else
                 *contador = m + 1;
-
-//            // costos de fracaso de localizacion
-//            (costos->Evocacion_fallida.cantidad)++;
-//            costos->Evocacion_fallida.sumatoria_vector += celdas_consultadas;
-//            if (costos->Evocacion_fallida.maximo < celdas_consultadas) costos->Evocacion_fallida.maximo = celdas_consultadas;
         }
-    }else *contador = 0;
+
+        // Se incluye la ultima comparacion en caso de no haber sido testigo
+        if(auxiliar[m] != 1){
+            celdas_consultadas ++;
+            auxiliar[m] = 1;
+        }
+
+    } else {
+
+        *contador = 0;
+    }
+
+    // devuelve la cantidad de celdas consultadas por parametro
+    *costos = celdas_consultadas;
 
     return salida;
 }

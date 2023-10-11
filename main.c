@@ -79,7 +79,7 @@ int Lectura_Operaciones(ListaSO *lso, ListaSOBB *lsobb, ArbolBB *abb,
 
     Envio nuevo_envio; Envio_init(&nuevo_envio); //variable temporal
 
-    fichero = fopen("Operaciones-Envios.txt","r"); //abrir el archivo
+    fichero = fopen("Operaciones-test.txt","r"); //abrir el archivo
     if (fichero == NULL) return 0;
 
     else {
@@ -185,7 +185,7 @@ int main()
                        "Comparacion de esfuerzos de estructuras\n"
                        PANTALLA_BARRA
                        "\n'N' es el tamaño del vector de costo correspondiente.\n\n"
-                       "\t\t| N = %u\t| N = %u\t| N = %u\t| N = %u\t|\n"
+                       "\t\t| N = %u\t\t| N = %u\t\t| N = %u\t\t| N = %u\t\t|\n"
                        "\n\t\t|\t Esfuerzo Maximo\t\t\t\t\t|\n"
                        "\t\t|\t Evocacion\t\t|\t\t|\t\t|\n"
                        "\t\t| Exitosa\t| Fracaso\t| Alta Ex\t| Baja Ex\t|\n"
@@ -200,10 +200,10 @@ int main()
                        "LSOBB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
                        "ABB:\t\t\t%.2f\t\t%.2f\t\t%.2f\t\t%.2f\n"
                        "\n\n",
-                       envios_lso_costos.Evocacion_exitosa.cantidad,
-                       envios_lso_costos.Evocacion_fallida.cantidad,
-                       envios_lso_costos.Alta.cantidad,
-                       envios_lso_costos.Baja.cantidad,
+                       envios_lsobb_costos.Evocacion_exitosa.cantidad,
+                       envios_lsobb_costos.Evocacion_fallida.cantidad,
+                       envios_lsobb_costos.Alta.cantidad,
+                       envios_lsobb_costos.Baja.cantidad,
 
                        envios_lso_costos.Evocacion_exitosa.maximo,
                        envios_lso_costos.Evocacion_fallida.maximo,

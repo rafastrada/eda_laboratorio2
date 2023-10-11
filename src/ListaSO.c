@@ -21,10 +21,13 @@ int LSO_localizar(ListaSO *lista,char codigo_envio[], int *contador, int *celdas
     }
 
     // se devuelve la cantidad de celdas consultadas
-    *celdas_consultadas = *contador + 1;
+    *celdas_consultadas = *contador;
 
     // Si 'contador' supera el ultimo elemento, no se encontro el elemento
     if (*contador <= lista->limite_superior) {
+        // suma la ultima comparacion
+        (*celdas_consultadas)++;
+
         // Si 'codigo_envio' es distinto del de Lista(contador), no se encontro el elemento
         if (strcmp(lista->arreglo[*contador].codigo_envio,codigo_envio) == 0) return LOCALIZACION_EXITOSA;
         else return LOCALIZACION_ERROR_NO_EXISTE;
