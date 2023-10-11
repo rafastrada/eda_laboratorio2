@@ -10,7 +10,7 @@ void LSOBB_init(ListaSOBB *lista) {
 /*Para la lista con busqueda binaria (LSOBB) la consigna a utilizar sera biseccion, lımite inferior exclusivo, lımite
 superior inclusivo, testigo y segmento mas grande a la derecha.*/
 
-int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,int *costos) {
+int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *costos) {
     // Busca en 'lista' el elemento con el campo 'codigo_envio',
     // si lo encuentra, la funcion devuelve el indice del arreglo,
     // si el elemento no se encuentra en la lista, devuelve la posicion donde deberia encontrarse.
@@ -53,16 +53,11 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador,int *co
         }
     }
 
-    // Suma otra celda consultada por la proxima comparacion
-    if(auxiliar[m] != 1){
-        celdas_consultadas ++;
-        auxiliar[m] = 1;
-    }
-
     *costos = celdas_consultadas;
 
     // Si codigo de envio es igual a el codigo de envio de arreglo(m)
     if (lista->limite_superior != -1){
+
         if (strcmp(lista->arreglo[m].codigo_envio,codigo_envio) == 0) {
 
             // Pasa ubicacion por parametro
@@ -137,11 +132,11 @@ int LSOBB_alta(ListaSOBB *lista, Envio *nuevo, Costos_estructura *costos) {
 int LSOBB_baja(ListaSOBB *lista,Envio *elemento, Costos_estructura *costos) {
 
     int posicion, salida = BAJA_ERROR_NO_EXISTE;
-    int exito_localizar, celdas_desplazadas = 0;
+    int exito_localizar, celdas_desplazadas = 0, costo_localizar = 0;
 
     // Se captura el resultado de la localizacion y su respectiva
     // posicion para 'codigo_envio'
-    exito_localizar = LSOBB_localizar(lista,elemento->codigo_envio,&posicion, costos);
+    exito_localizar = LSOBB_localizar(lista,elemento->codigo_envio,&posicion, &costo_localizar);
 
     if (exito_localizar == LOCALIZACION_EXITOSA){
 
