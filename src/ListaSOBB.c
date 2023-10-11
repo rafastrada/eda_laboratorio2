@@ -34,7 +34,6 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *c
 
     // Mientras el limite inferior sea menor al limite superior
     while ((li + 1) < ls) {
-
         //Si el codigo de envio es menor al codigo de arreglo(m)
         if (strcmp(codigo_envio, lista->arreglo[m].codigo_envio) < 0) {
             //Actualiza el limite superior
@@ -44,18 +43,23 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *c
             li = m - 1;
         }
 
-        //Actualizando testigo
-        m = ceil(((li + 1) + ls) / 2.0);
-
         if(auxiliar[m] != 1){
             celdas_consultadas ++;
             auxiliar[m] = 1;
         }
-    }
 
+        //Actualizando testigo
+        m = ceil(((li + 1) + ls) / 2.0);
+    }
 
     // Si codigo de envio es igual a el codigo de envio de arreglo(m)
     if (lista->limite_superior != -1){
+
+        // Se incluye la ultima comparacion en caso de no haber sido testigo
+        if(auxiliar[m] != 1){
+            celdas_consultadas ++;
+            auxiliar[m] = 1;
+        }
 
         if (strcmp(lista->arreglo[m].codigo_envio,codigo_envio) == 0) {
 
@@ -72,11 +76,6 @@ int LSOBB_localizar(ListaSOBB *lista, char codigo_envio[], int *contador, int *c
                 *contador = m + 1;
         }
 
-        // Se incluye la ultima comparacion en caso de no haber sido testigo
-        if(auxiliar[m] != 1){
-            celdas_consultadas ++;
-            auxiliar[m] = 1;
-        }
 
     } else {
 

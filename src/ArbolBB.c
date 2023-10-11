@@ -83,7 +83,6 @@ int ABB_alta(ArbolBB *arbol, Envio *nuevo, Costos_estructura *costos) {
             (costos->Alta.cantidad)++;
             costos->Alta.sumatoria_vector += 0.5;   // 0.5 por el puntero actualizado
             if (costos->Alta.maximo < 0.5) costos->Alta.maximo = 0.5;   // operacion redundante despues de la primera alta
-            // @todo : quitar 'if' redundante de operacion de alta?
         }
         // caso que no haya memoria disponible
         else salida = ALTA_ERROR_LISTA_LLENA;

@@ -8,24 +8,27 @@ Integrantes:
 
 Resultados de la comparacion de las estructuras:
                 |        Esfuerzo Maximo                                        |
-                |        Localizacion           |               |               |
+                |        Evocacion              |               |               |
                 | Exitosa       | Fracaso       | Alta Ex       | Baja Ex       |
 LSO:                    60.00           42.00           58.00           47.00
-LSOBB:                  5.00            5.00            58.00           47.00
-ABB:                    12.00           11.00           1.50            1.50
+LSOBB:                  6.00            6.00            58.00           47.00
+ABB:                    12.00           10.00           0.50            1.50
+
                 |        Esfuerzo Medio                                         |
-                |        Localizacion           |               |               |
+                |        Evocacion              |               |               |
                 | Exitosa       | Fracaso       | Alta Ex       | Baja Ex       |
-LSO:                    23.97           16.75           15.07           16.77
-LSOBB:                  4.59            4.00            15.07           16.77
-ABB:                    5.71            6.27            1.50            0.98
+LSO:                    23.97           16.70           15.07           16.77
+LSOBB:                  5.57            4.87            15.07           16.77
+ABB:                    5.71            5.27            0.50            0.98
 
 En base a los resultados obtenidos de los esfuerzos de las estructuras, podemos observar
 que el Arbol Binario de Busqueda tiene costos casi constantes para las operaciones de
 Altas y Bajas. En cuanto a la localizacion, aunque la Lista secuencial ordenada con Busqueda Binaria
-tiene los maximos mas bajos, las medias del ABB y la LSOBB son muy proximas.
-Tambien se puede observar que el desempeño de la LSO es la menos optima para las operaciones
-realizadas sobre las estructuras.
+tiene los maximos mas bajos, las medias del ABB y la LSOBB son muy proximas, dejando la
+LSO con los esfuerzos menos optimom para las operaciones realizadas sobre las estructuras.
+
+Ante los altos esfuerzos en las altas y bajas exitosas en la LSOBB, podriamos considerar al Arbol Binario
+de Busqueda (ABB) como la estructura mas conveniente para esta situación.
 
 */
 
@@ -79,7 +82,7 @@ int Lectura_Operaciones(ListaSO *lso, ListaSOBB *lsobb, ArbolBB *abb,
 
     Envio nuevo_envio; Envio_init(&nuevo_envio); //variable temporal
 
-    fichero = fopen("Operaciones-test.txt","r"); //abrir el archivo
+    fichero = fopen("Operaciones-Envios.txt","r"); //abrir el archivo
     if (fichero == NULL) return 0;
 
     else {
@@ -119,7 +122,6 @@ int Lectura_Operaciones(ListaSO *lso, ListaSOBB *lsobb, ArbolBB *abb,
                     ABB_baja(abb, &nuevo_envio, abb_costos);
                 }
             } else if (operacion == CODOP_EVOCAR) {
-                // @fixme : cambiar localizar por evocar, borrar auxiliar
                 LSO_evocar(lso,nuevo_envio.codigo_envio,lso_costos);
                 LSOBB_evocar(lsobb, nuevo_envio.codigo_envio, lsobb_costos);
                 ABB_evocar(abb,nuevo_envio.codigo_envio, abb_costos);
@@ -185,7 +187,7 @@ int main()
                        "Comparacion de esfuerzos de estructuras\n"
                        PANTALLA_BARRA
                        "\n'N' es el tamaño del vector de costo correspondiente.\n\n"
-                       "\t\t| N = %u\t\t| N = %u\t\t| N = %u\t\t| N = %u\t\t|\n"
+                       "\t\t| N = %u\t| N = %u\t| N = %u\t| N = %u\t|\n"
                        "\n\t\t|\t Esfuerzo Maximo\t\t\t\t\t|\n"
                        "\t\t|\t Evocacion\t\t|\t\t|\t\t|\n"
                        "\t\t| Exitosa\t| Fracaso\t| Alta Ex\t| Baja Ex\t|\n"
