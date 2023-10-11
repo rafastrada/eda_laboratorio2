@@ -45,12 +45,18 @@ int ABB_localizar(ArbolBB *arbol, char codigo_envio[], ABB_Hoja **ubicacion, ABB
         celdas_consultadas++;   // una celda consultada
     }
 
-    celdas_consultadas++;   // se añade la consulta a la celda que cierra el bucle anterior
-    *costo = celdas_consultadas;    // se devuelve la cantidad de celdas consultadas por parametro
 
     // si no se apunta un nodo externo (null), entonces se encontro el elemento
-    if (*ubicacion != NULL) return LOCALIZACION_EXITOSA;
-    else return LOCALIZACION_ERROR_NO_EXISTE;
+    if (*ubicacion != NULL) {
+        celdas_consultadas++;   // se añade la consulta a la celda que cierra el bucle anterior
+                                // salvo que fuese un nodo externo (NuLL)
+        *costo = celdas_consultadas;    // se devuelve la cantidad de celdas consultadas por parametro
+        return LOCALIZACION_EXITOSA;
+    }
+    else {
+        *costo = celdas_consultadas;
+        return LOCALIZACION_ERROR_NO_EXISTE;
+    }
 }
 
 int ABB_alta(ArbolBB *arbol, Envio *nuevo, Costos_estructura *costos) {

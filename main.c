@@ -72,8 +72,7 @@ realizadas sobre las estructuras.
 int Lectura_Operaciones(ListaSO *lso, ListaSOBB *lsobb, ArbolBB *abb,
                         Costos_estructura *lso_costos,
                         Costos_estructura *lsobb_costos,
-                        Costos_estructura *abb_costos,
-                        Costos_estructura *lsobb_costos_loc
+                        Costos_estructura *abb_costos
                         ) {
     FILE *fichero;
     int operacion, auxiliar;
@@ -142,10 +141,8 @@ int main()
     ArbolBB envios_abb; ABB_initArbol(&envios_abb);
 
     // Costos de cada estructura
-    Costos_estructura envios_lso_costos, envios_lsobb_costos, envios_abb_costos,
-    envios_lsobb_costos_loc;
+    Costos_estructura envios_lso_costos, envios_lsobb_costos, envios_abb_costos;
     Costos_estructura_init(&envios_lso_costos); Costos_estructura_init(&envios_lsobb_costos); Costos_estructura_init(&envios_abb_costos);
-    Costos_estructura_init(&envios_lsobb_costos_loc);
 
     int hubo_memorizacion = 0;
 
@@ -173,14 +170,12 @@ int main()
             case '1': {
                 if (!hubo_memorizacion) {
                     Lectura_Operaciones(&envios_lso, &envios_lsobb, &envios_abb,
-                                        &envios_lso_costos, &envios_lsobb_costos, &envios_abb_costos,
-                                        &envios_lsobb_costos);
+                                        &envios_lso_costos, &envios_lsobb_costos, &envios_abb_costos);
 
                     // Calculo de costos medios
                     Costos_estructura_calculoMedias(&envios_lso_costos);
                     Costos_estructura_calculoMedias(&envios_lsobb_costos);
                     Costos_estructura_calculoMedias(&envios_abb_costos);
-                    Costos_estructura_calculoMedias(&envios_lsobb_costos_loc);
 
                     hubo_memorizacion = 1;
                 }
@@ -301,36 +296,6 @@ int main()
                     system("pause");
                 }
             }
-//            case '4':{
-//                system("cls");
-//                int resultado, repetidos = 0, cant, cargas;
-//                resultado = Memorizacion_previa(&lista_envios, &repetidos, &cargas);
-//
-//                if(resultado == MEMORIZACION_EXITOSA){
-//                    printf("La memorizacion fue exitosa.\n\n");
-//                }
-//                if(resultado == MEMORIZACION_PARCIAL){
-//                    printf("La memorizacion fue exitosa parcialmente.\n La cantidad de envios en el archivo era mayor al maximo de la lista\n\n ");
-//                }
-//                if(resultado == ERROR_ABRIR_FICHERO) {
-//                    printf("Existe un problema al intentar abrir el archivo.\n Por favor revisar el archivo \"Envios.txt\" \n");
-//                }
-//                if(resultado != ERROR_ABRIR_FICHERO) {
-//                    printf("Se intentaron cargar %d Envios \n", cargas);
-//                    printf("De los cuales:\n \t Envios repetidos: %d \n \t Envios cargados correctamente: %d \n ", repetidos, cargas - repetidos);
-//                }
-//
-//            system("pause"); break;
-//            }
-//
-//            case '5':{
-//            system("cls");
-//            printf(
-//                           "%sMostrando Estructura\n%s\n",
-//                           PANTALLA_BARRA,PANTALLA_BARRA);
-//            Mostrar_Lista(lista_envios);
-//            system("pause");
-//            }
         }
 
     } while (seleccion_usuario_menu_principal != '3');
